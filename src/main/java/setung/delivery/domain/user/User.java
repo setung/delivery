@@ -3,10 +3,7 @@ package setung.delivery.domain.user;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -17,9 +14,15 @@ public class User {
     @GeneratedValue
     @Column(name = "user_id")
     private Long id;
+
     private String name;
+
+    @Column(unique = true)
     private String email;
+
+    @Column(unique = true)
     private String tel;
     private String address;
+    private String password;
 
 }
