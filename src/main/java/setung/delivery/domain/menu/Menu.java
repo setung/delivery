@@ -22,7 +22,7 @@ public class Menu {
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
-    Restaurant restaurant;
+    private Restaurant restaurant;
 
     private String name;
     private int price;
