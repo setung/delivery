@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import setung.delivery.domain.menu.Menu;
 import setung.delivery.domain.owner.Owner;
 
 import javax.persistence.*;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,4 +37,7 @@ public class Restaurant {
 
     @Enumerated(EnumType.STRING)
     private RestaurantCategory category;
+
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
+    private List<Menu> menus;
 }
