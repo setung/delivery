@@ -6,8 +6,8 @@ import setung.delivery.domain.menu.Menu;
 import setung.delivery.domain.menu.MenuDto;
 import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.exception.NotFoundException;
-import setung.delivery.repository.MenuRepository.MenuRepository;
-import setung.delivery.repository.restaurant.RestaurantRepository;
+import setung.delivery.repository.MenuRepository;
+import setung.delivery.repository.RestaurantRepository;
 
 @Service
 @AllArgsConstructor

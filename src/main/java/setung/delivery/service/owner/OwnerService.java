@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import setung.delivery.domain.owner.Owner;
 import setung.delivery.domain.owner.OwnerDto;
-import setung.delivery.repository.owner.OwnerRepository;
+import setung.delivery.repository.OwnerRepository;
 import setung.delivery.utils.SHA256;
 
 @Service

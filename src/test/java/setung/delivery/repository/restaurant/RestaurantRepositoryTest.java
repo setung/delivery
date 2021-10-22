@@ -1,6 +1,5 @@
 package setung.delivery.repository.restaurant;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,12 +7,12 @@ import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.domain.owner.Owner;
 import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.domain.restaurant.RestaurantCategory;
-import setung.delivery.repository.owner.OwnerRepository;
+import setung.delivery.repository.RestaurantRepository;
+import setung.delivery.repository.OwnerRepository;
 
 import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

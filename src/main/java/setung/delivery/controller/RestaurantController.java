@@ -1,11 +1,11 @@
-package setung.delivery.controller.restaurant;
+package setung.delivery.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import setung.delivery.annotation.LoginOwnerId;
+import setung.delivery.argumentresolver.LoginOwnerId;
 import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.domain.restaurant.RestaurantDto;
 import setung.delivery.service.restaurant.RestaurantService;

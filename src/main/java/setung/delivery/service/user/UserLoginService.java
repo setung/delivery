@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import setung.delivery.domain.user.User;
 import setung.delivery.exception.NotFoundException;
-import setung.delivery.repository.user.UserRepository;
+import setung.delivery.repository.UserRepository;
 import setung.delivery.utils.SHA256;
 
 import javax.servlet.http.HttpSession;
