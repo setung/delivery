@@ -1,5 +1,6 @@
 package setung.delivery.domain.owner;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +32,7 @@ public class Owner {
     private String tel;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
+    @JsonIgnore
     List<Restaurant> restaurants;
 
 }
