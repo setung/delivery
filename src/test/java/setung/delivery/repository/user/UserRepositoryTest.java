@@ -10,6 +10,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.domain.user.User;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -71,5 +72,28 @@ class UserRepositoryTest {
         Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
             userRepository.save(userB);
         });
+    }
+
+    @Test
+    @DisplayName("email과 password로 User 찾기")
+    public void findUserByEmailAndPassword() {
+        User userA = User.builder()
+                .name("userA")
+                .address("address")
+                .email("user@user.com")
+                .tel("010-0000-0000")
+                .password("1234")
+                .build();
+
+        userRepository.save(userA);
+
+        User findUser = userRepository.findByEmailAndPassword("user@user.com", "1234");
+        User wrongEmail = userRepository.findByEmailAndPassword("user", "1234");
+        User wrongPassword = userRepository.findByEmailAndPassword("user@user.com", "11");
+
+        assertThat(userA).isNotNull();
+        assertThat(userA).isEqualTo(findUser);
+        assertThat(wrongEmail).isNull();
+        assertThat(wrongPassword).isNull();
     }
 }
