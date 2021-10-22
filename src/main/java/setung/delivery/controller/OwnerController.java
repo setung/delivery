@@ -1,8 +1,7 @@
-package setung.delivery.controller.owner;
+package setung.delivery.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import setung.delivery.annotation.LoginOwnerId;
 import setung.delivery.domain.owner.Owner;
 import setung.delivery.domain.owner.OwnerDto;
 import setung.delivery.service.owner.OwnerLoginService;

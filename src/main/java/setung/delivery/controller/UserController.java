@@ -1,4 +1,4 @@
-package setung.delivery.controller.user;
+package setung.delivery.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

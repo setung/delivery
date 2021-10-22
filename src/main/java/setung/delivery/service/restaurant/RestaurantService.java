@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import setung.delivery.domain.owner.Owner;
 import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.domain.restaurant.RestaurantDto;
-import setung.delivery.repository.owner.OwnerRepository;
-import setung.delivery.repository.restaurant.RestaurantRepository;
+import setung.delivery.repository.OwnerRepository;
+import setung.delivery.repository.RestaurantRepository;
 
 @Service
 @AllArgsConstructor

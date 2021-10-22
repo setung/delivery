@@ -1,8 +1,8 @@
-package setung.delivery.controller.menu;
+package setung.delivery.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import setung.delivery.annotation.LoginOwnerId;
+import setung.delivery.argumentresolver.LoginOwnerId;
 import setung.delivery.domain.menu.Menu;
 import setung.delivery.domain.menu.MenuDto;
 import setung.delivery.service.Menu.MenuService;
