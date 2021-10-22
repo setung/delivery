@@ -6,4 +6,6 @@ import setung.delivery.domain.restaurant.Restaurant;
 
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant,Long> {
+
+    Restaurant findByIdAndOwnerId(long restaurantId, long ownerId);
 }

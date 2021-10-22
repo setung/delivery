@@ -1,5 +1,6 @@
 package setung.delivery.domain.restaurant;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,6 +39,7 @@ public class Restaurant {
     @Enumerated(EnumType.STRING)
     private RestaurantCategory category;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<Menu> menus;
 }
