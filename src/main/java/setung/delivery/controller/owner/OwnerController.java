@@ -2,8 +2,10 @@ package setung.delivery.controller.owner;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import setung.delivery.annotation.LoginOwnerId;
 import setung.delivery.domain.owner.Owner;
 import setung.delivery.domain.owner.OwnerDto;
+import setung.delivery.service.owner.OwnerLoginService;
 import setung.delivery.service.owner.OwnerService;
 
 @RestController
@@ -12,10 +14,26 @@ import setung.delivery.service.owner.OwnerService;
 public class OwnerController {
 
     private final OwnerService ownerService;
+    private final OwnerLoginService loginService;
 
     @PostMapping
     public Owner join(@RequestBody OwnerDto ownerDto) {
         return ownerService.join(ownerDto);
+    }
+
+    @PostMapping("/login")
+    public void login(@RequestParam String email, @RequestParam String password) {
+        loginService.login(email, password);
+    }
+
+    @PostMapping("/logout")
+    public void logout() {
+        loginService.logout();
+    }
+
+    @GetMapping("/login")
+    public Owner getLoginUser() {
+        return loginService.getLoginOwner();
     }
 
 }
