@@ -29,4 +29,10 @@ public class User {
     private String address;
     private String password;
 
+    public User updateUser(UserDto userDto) {
+        this.name = userDto.getName();
+        this.address = userDto.getAddress();
+        this.password = userDto.getPassword();
+        return this;
+    }
 }
