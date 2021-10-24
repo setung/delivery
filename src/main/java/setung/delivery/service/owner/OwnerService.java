@@ -23,6 +23,7 @@ public class OwnerService {
 
     public void deleteOwner(long ownerId) {
         ownerRepository.deleteById(ownerId);
+    }
 
     public Owner updateOwner(long ownerId, OwnerDto ownerDto) {
         ownerDto.setPassword(SHA256.encBySha256(ownerDto.getPassword()));

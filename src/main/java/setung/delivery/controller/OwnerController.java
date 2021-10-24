@@ -41,10 +41,10 @@ public class OwnerController {
     public void deleteOwner(@LoginOwnerId long ownerId) {
         ownerService.deleteOwner(ownerId);
         loginService.logout();
+    }
 
     @PutMapping
     public Owner updateOwner(@LoginOwnerId long ownerId, @RequestBody OwnerDto ownerDto) {
         return ownerService.updateOwner(ownerId, ownerDto);
-
     }
 }
