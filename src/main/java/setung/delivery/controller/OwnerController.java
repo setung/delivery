@@ -2,6 +2,7 @@ package setung.delivery.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import setung.delivery.argumentresolver.LoginOwnerId;
 import setung.delivery.domain.owner.Owner;
 import setung.delivery.domain.owner.OwnerDto;
 import setung.delivery.service.owner.OwnerLoginService;
@@ -35,4 +36,9 @@ public class OwnerController {
         return loginService.getLoginOwner();
     }
 
+    @DeleteMapping
+    public void deleteOwner(@LoginOwnerId long ownerId) {
+        ownerService.deleteOwner(ownerId);
+        loginService.logout();
+    }
 }

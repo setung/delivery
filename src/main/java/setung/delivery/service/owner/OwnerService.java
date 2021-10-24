@@ -20,4 +20,7 @@ public class OwnerService {
         return savedOwner;
     }
 
+    public void deleteOwner(long ownerId) {
+        ownerRepository.deleteById(ownerId);
+    }
 }
