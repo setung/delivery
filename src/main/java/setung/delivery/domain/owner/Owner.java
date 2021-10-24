@@ -35,4 +35,12 @@ public class Owner {
     @JsonIgnore
     List<Restaurant> restaurants;
 
+    public Owner updateOwner(OwnerDto ownerDto) {
+        name = ownerDto.getName();
+        email = ownerDto.getEmail();
+        address = ownerDto.getAddress();
+        password = ownerDto.getPassword();
+        tel = ownerDto.getTel();
+        return this;
+    }
 }
