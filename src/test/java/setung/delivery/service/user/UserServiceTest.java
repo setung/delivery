@@ -51,4 +51,23 @@ class UserServiceTest {
         Assertions.assertThat(findUser.getName()).isEqualTo("aaaa");
     }
 
+    @Test
+    public void deleteUser() {
+        //given
+        UserDto userdto = UserDto.builder()
+                .name("jsh")
+                .email("test@test.com")
+                .tel("000-0000-0000")
+                .password("1234")
+                .build();
+
+        //when
+        User savedUser = userService.join(userdto);
+        userService.deleteUser(savedUser.getId());
+
+        //then
+        User deletedUser = userService.findUserByEmailAndPassword(userdto.getEmail(), userdto.getPassword());
+        Assertions.assertThat(deletedUser).isNull();
+    }
+
 }

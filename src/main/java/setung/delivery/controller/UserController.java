@@ -40,4 +40,10 @@ public class UserController {
     public User updateUser(@LoginUserId long userId, @RequestBody UserDto userDto) {
         return userService.updateUser(userId, userDto);
     }
+
+    @DeleteMapping
+    public void deleteUser(@LoginUserId long userId) {
+        userService.deleteUser(userId);
+        loginService.logout();
+    }
 }
