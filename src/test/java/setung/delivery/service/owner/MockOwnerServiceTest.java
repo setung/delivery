@@ -1,5 +1,6 @@
 package setung.delivery.service.owner;
 
+import org.junit.jupiter.api.DisplayName;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import setung.delivery.domain.owner.Owner;
+import setung.delivery.repository.OwnerRepository;
 import setung.delivery.domain.owner.OwnerDto;
 import setung.delivery.repository.OwnerRepository;
 import setung.delivery.utils.SHA256;
@@ -30,6 +32,17 @@ class MockOwnerServiceTest {
     OwnerService ownerService;
 
     @Test
+    @DisplayName("정상적인 Owner 계정 삭제")
+    void deleteOwner() {
+        Owner owner = Owner.builder().id(1L).build();
+
+        ownerService.deleteOwner(owner.getId());
+
+        verify(ownerRepository,times(1)).deleteById(owner.getId());
+    }
+  
+    @Test
+    @DisplayName("정상적인 Owner 회원 정보 ")
     void updateOwner() {
         OwnerDto ownerDto = OwnerDto.builder()
                 .id(1L)
@@ -44,5 +57,6 @@ class MockOwnerServiceTest {
 
         verify(ownerRepository,times(1)).findById(ownerDto.getId());
         verify(ownerRepository, times(1)).save(owner);
+
     }
 }
