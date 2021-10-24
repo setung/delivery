@@ -36,9 +36,15 @@ public class OwnerController {
         return loginService.getLoginOwner();
     }
 
+
     @DeleteMapping
     public void deleteOwner(@LoginOwnerId long ownerId) {
         ownerService.deleteOwner(ownerId);
         loginService.logout();
+
+    @PutMapping
+    public Owner updateOwner(@LoginOwnerId long ownerId, @RequestBody OwnerDto ownerDto) {
+        return ownerService.updateOwner(ownerId, ownerDto);
+
     }
 }

@@ -20,7 +20,16 @@ public class OwnerService {
         return savedOwner;
     }
 
+
     public void deleteOwner(long ownerId) {
         ownerRepository.deleteById(ownerId);
+
+    public Owner updateOwner(long ownerId, OwnerDto ownerDto) {
+        ownerDto.setPassword(SHA256.encBySha256(ownerDto.getPassword()));
+
+        Owner owner = ownerRepository.findById(ownerId).get();
+        owner.updateOwner(ownerDto);
+        return ownerRepository.save(owner);
+
     }
 }

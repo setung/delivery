@@ -1,6 +1,7 @@
 package setung.delivery.service.owner;
 
 import org.junit.jupiter.api.DisplayName;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,6 +12,11 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import setung.delivery.domain.owner.Owner;
 import setung.delivery.repository.OwnerRepository;
+import setung.delivery.domain.owner.OwnerDto;
+import setung.delivery.repository.OwnerRepository;
+import setung.delivery.utils.SHA256;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -33,5 +39,24 @@ class MockOwnerServiceTest {
         ownerService.deleteOwner(owner.getId());
 
         verify(ownerRepository,times(1)).deleteById(owner.getId());
+    }
+  
+    @Test
+    @DisplayName("정상적인 Owner 회원 정보 ")
+    void updateOwner() {
+        OwnerDto ownerDto = OwnerDto.builder()
+                .id(1L)
+                .password("1234")
+                .build();
+
+        Owner owner = ownerDto.toOwner();
+
+        when(ownerRepository.findById(1L)).thenReturn(Optional.ofNullable(owner));
+
+        ownerService.updateOwner(ownerDto.getId(), ownerDto);
+
+        verify(ownerRepository,times(1)).findById(ownerDto.getId());
+        verify(ownerRepository, times(1)).save(owner);
+
     }
 }
