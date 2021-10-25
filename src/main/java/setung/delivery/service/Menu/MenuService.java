@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 import setung.delivery.domain.menu.Menu;
 import setung.delivery.domain.menu.MenuDto;
 import setung.delivery.domain.restaurant.Restaurant;
-import setung.delivery.exception.NotFoundException;
+import setung.delivery.exception.CustomException;
+import setung.delivery.exception.ErrorCode;
 import setung.delivery.repository.MenuRepository;
 import setung.delivery.repository.RestaurantRepository;
 
@@ -20,7 +21,7 @@ public class MenuService {
         Restaurant restaurant = restaurantRepository.findByIdAndOwnerId(restaurantId, ownerId);
 
         if (restaurant == null)
-            throw new NotFoundException("restaurantId : " + restaurantId + " OwnerId : " + ownerId + " 존재하지 않는 Restaurant 입니다.");
+            throw new CustomException(ErrorCode.NOT_FOUND_RESTAURANT);
 
         menuDto.setRestaurant(restaurant);
 

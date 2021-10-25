@@ -12,7 +12,7 @@ import setung.delivery.domain.menu.Menu;
 import setung.delivery.domain.menu.MenuCategory;
 import setung.delivery.domain.menu.MenuDto;
 import setung.delivery.domain.restaurant.Restaurant;
-import setung.delivery.exception.NotFoundException;
+import setung.delivery.exception.CustomException;
 import setung.delivery.repository.MenuRepository;
 import setung.delivery.repository.RestaurantRepository;
 
@@ -74,7 +74,7 @@ class MenuServiceTest {
         when(menuRepository.save(any())).thenReturn(menuDto.toMenu());
 
         //then
-        assertThrows(NotFoundException.class,()->{
+        assertThrows(CustomException.class,()->{
             menuService.registerMenu(any(Long.class), any(Long.class), menuDto);
         });
     }

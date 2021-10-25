@@ -24,10 +24,6 @@ public class OwnerIdArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         Owner loginOwner = ownerLoginService.getLoginOwner();
-
-        if(loginOwner == null)
-            throw new RuntimeException("로그인이 필요합니다.");
-
         return loginOwner.getId();
     }
 }
