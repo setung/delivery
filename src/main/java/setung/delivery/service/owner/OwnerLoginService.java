@@ -3,7 +3,8 @@ package setung.delivery.service.owner;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import setung.delivery.domain.owner.Owner;
-import setung.delivery.exception.NotFoundException;
+import setung.delivery.exception.CustomException;
+import setung.delivery.exception.ErrorCode;
 import setung.delivery.repository.OwnerRepository;
 import setung.delivery.utils.SHA256;
 
@@ -23,7 +24,7 @@ public class OwnerLoginService {
         Owner owner = ownerRepository.findByEmailAndPassword(email, password);
 
         if (owner == null)
-            throw new NotFoundException("email 혹은 password가 잘못되었습니다.");
+            throw new CustomException(ErrorCode.NOT_FOUND_OWNER);
 
         httpSession.setAttribute(OWNER_ID, owner.getId());
     }
@@ -36,7 +37,7 @@ public class OwnerLoginService {
         Long ownerId = (Long) httpSession.getAttribute(OWNER_ID);
 
         if(ownerId == null)
-            throw new RuntimeException("로그인이 필요합니다.");
+            throw new CustomException(ErrorCode.NEED_TO_LOGIN_OWNER);
 
         Optional<Owner> owner = ownerRepository.findById(ownerId);
 

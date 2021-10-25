@@ -3,7 +3,8 @@ package setung.delivery.service.user;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import setung.delivery.domain.user.User;
-import setung.delivery.exception.NotFoundException;
+import setung.delivery.exception.CustomException;
+import setung.delivery.exception.ErrorCode;
 import setung.delivery.repository.UserRepository;
 import setung.delivery.utils.SHA256;
 
@@ -23,7 +24,7 @@ public class UserLoginService {
         User user = userRepository.findByEmailAndPassword(email, password);
 
         if (user == null)
-            throw new NotFoundException("email 혹은 password가 잘못되었습니다.");
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
 
         httpSession.setAttribute(USER_ID, user.getId());
     }
@@ -36,7 +37,7 @@ public class UserLoginService {
         Long userId = (Long) httpSession.getAttribute(USER_ID);
 
         if(userId == null)
-            throw new RuntimeException("로그인이 필요합니다.");
+            throw new CustomException(ErrorCode.NEED_TO_LOGIN_USER);
 
         Optional<User> user = userRepository.findById(userId);
 

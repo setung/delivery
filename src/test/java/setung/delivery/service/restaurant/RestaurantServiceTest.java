@@ -13,6 +13,7 @@ import setung.delivery.domain.owner.Owner;
 import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.domain.restaurant.RestaurantCategory;
 import setung.delivery.domain.restaurant.RestaurantDto;
+import setung.delivery.exception.CustomException;
 import setung.delivery.repository.OwnerRepository;
 import setung.delivery.repository.RestaurantRepository;
 
@@ -82,8 +83,8 @@ class RestaurantServiceTest {
                 .tel("00-000-0000")
                 .build();
 
-        when(ownerRepository.findById(any())).thenThrow(RuntimeException.class);
+        when(ownerRepository.findById(any())).thenThrow(CustomException.class);
 
-        assertThrows(RuntimeException.class, () -> restaurantService.register(1L, restaurantDto));
+        assertThrows(CustomException.class, () -> restaurantService.register(1L, restaurantDto));
     }
 }
