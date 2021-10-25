@@ -27,6 +27,7 @@ public class Restaurant {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
+    @JsonIgnore
     private Owner owner;
 
     private String name;
