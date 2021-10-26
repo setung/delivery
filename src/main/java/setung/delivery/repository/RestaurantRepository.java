@@ -1,5 +1,6 @@
 package setung.delivery.repository;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -13,5 +14,5 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
     Restaurant findByIdAndOwnerId(long restaurantId, long ownerId);
 
-    List<Restaurant> findByCategory(RestaurantCategory category, Pageable pageable);
+    Page<Restaurant> findByCategory(RestaurantCategory category, Pageable pageable);
 }

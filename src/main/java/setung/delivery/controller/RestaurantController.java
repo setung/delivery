@@ -1,6 +1,7 @@
 package setung.delivery.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,14 +27,9 @@ public class RestaurantController {
     }
 
     @GetMapping()
-    public List<Restaurant> findRestaurants(
+    public Page<Restaurant> findRestaurants(
             @RequestParam(required = false) RestaurantCategory category,
-            @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "5") int size,
-            @RequestParam(required = false, defaultValue = "id") String[] sortBy,
-            @RequestParam(required = false, defaultValue = "DESC") Sort.Direction orderBy) {
-
-        Pageable pageable = PageRequest.of(page, size, orderBy, sortBy);
+            Pageable pageable) {
 
         if (category == null) {
             return restaurantService.findRestaurants(pageable);
