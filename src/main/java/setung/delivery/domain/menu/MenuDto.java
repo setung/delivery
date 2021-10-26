@@ -3,6 +3,8 @@ package setung.delivery.domain.menu;
 import lombok.*;
 import setung.delivery.domain.restaurant.Restaurant;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -16,6 +18,8 @@ public class MenuDto {
     private int price;
     private int quantity;
     private MenuCategory category;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Menu toMenu() {
         return Menu.builder()

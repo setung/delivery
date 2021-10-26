@@ -31,4 +31,17 @@ public class Menu extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private MenuCategory category;
+
+    public MenuDto toMenuDto() {
+        return MenuDto.builder()
+                .id(id)
+                .restaurant(restaurant)
+                .name(name)
+                .price(price)
+                .quantity(quantity)
+                .category(category)
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
+    }
 }
