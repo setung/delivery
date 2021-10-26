@@ -27,11 +27,11 @@ public class RestaurantService {
         return savedRestaurant;
     }
 
-    public List<Restaurant> findRestaurants(Pageable pageable) {
-        return restaurantRepository.findAll(pageable).getContent();
+    public Page<Restaurant> findRestaurants(Pageable pageable) {
+        return restaurantRepository.findAll(pageable);
     }
 
-    public List<Restaurant> findRestaurants(RestaurantCategory category,Pageable pageable) {
+    public Page<Restaurant> findRestaurants(RestaurantCategory category,Pageable pageable) {
         return restaurantRepository.findByCategory(category,pageable);
     }
 }
