@@ -30,6 +30,19 @@ public class User extends BaseEntity {
     private String address;
     private String password;
 
+    public UserDto toUserDto() {
+        return UserDto.builder()
+                .id(id)
+                .name(name)
+                .email(email)
+                .tel(tel)
+                .address(address)
+                .password(password)
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
+    }
+
     public User updateUser(UserDto userDto) {
         this.name = userDto.getName();
         this.address = userDto.getAddress();
