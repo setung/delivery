@@ -1,8 +1,10 @@
 package setung.delivery.domain.restaurant;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import setung.delivery.domain.owner.Owner;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -13,6 +15,8 @@ import java.time.LocalTime;
 public class RestaurantDto {
 
     private Long id;
+
+    @JsonIgnore
     private Owner owner;
     private String name;
     private String address;
@@ -21,6 +25,8 @@ public class RestaurantDto {
     private LocalTime openAt;
     private LocalTime closeAt;
     private RestaurantCategory category;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Restaurant toRestaurant() {
         return Restaurant.builder()
