@@ -2,6 +2,8 @@ package setung.delivery.domain.user;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -15,6 +17,8 @@ public class UserDto {
     private String tel;
     private String address;
     private String password;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public User toUser() {
         User user = User.builder()

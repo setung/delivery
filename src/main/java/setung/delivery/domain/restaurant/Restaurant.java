@@ -28,7 +28,6 @@ public class Restaurant extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
-    @JsonIgnore
     private Owner owner;
 
     private String name;
@@ -44,4 +43,20 @@ public class Restaurant extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<Menu> menus;
+
+    public RestaurantDto toRestaurantDto() {
+        return RestaurantDto.builder()
+                .id(id)
+                .owner(owner)
+                .name(name)
+                .address(address)
+                .tel(tel)
+                .status(status)
+                .openAt(openAt)
+                .closeAt(closeAt)
+                .category(category)
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
+    }
 }

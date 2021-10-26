@@ -2,6 +2,8 @@ package setung.delivery.domain.owner;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -15,6 +17,8 @@ public class OwnerDto {
     private String address;
     private String password;
     private String tel;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Owner toOwner() {
         Owner owner = Owner.builder()

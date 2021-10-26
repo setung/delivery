@@ -36,6 +36,19 @@ public class Owner extends BaseEntity {
     @JsonIgnore
     List<Restaurant> restaurants;
 
+    public OwnerDto toOwnerDto() {
+        return OwnerDto.builder()
+                .id(id)
+                .name(name)
+                .email(email)
+                .address(address)
+                .password(password)
+                .tel(tel)
+                .createdAt(getCreatedAt())
+                .updatedAt(getUpdatedAt())
+                .build();
+    }
+
     public Owner updateOwner(OwnerDto ownerDto) {
         name = ownerDto.getName();
         email = ownerDto.getEmail();

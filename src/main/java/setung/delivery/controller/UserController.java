@@ -3,7 +3,6 @@ package setung.delivery.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import setung.delivery.argumentresolver.LoginUserId;
-import setung.delivery.domain.user.User;
 import setung.delivery.domain.user.UserDto;
 import setung.delivery.service.user.UserLoginService;
 import setung.delivery.service.user.UserService;
@@ -17,8 +16,8 @@ public class UserController {
     private final UserLoginService loginService;
 
     @PostMapping
-    public User join(@RequestBody UserDto userDto) {
-        return userService.join(userDto);
+    public UserDto join(@RequestBody UserDto userDto) {
+        return userService.join(userDto).toUserDto();
     }
 
     @PostMapping("/login")
@@ -32,13 +31,13 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public User getLoginUser() {
-        return loginService.getLoginUser();
+    public UserDto getLoginUser() {
+        return loginService.getLoginUser().toUserDto();
     }
 
     @PutMapping
-    public User updateUser(@LoginUserId long userId, @RequestBody UserDto userDto) {
-        return userService.updateUser(userId, userDto);
+    public UserDto updateUser(@LoginUserId long userId, @RequestBody UserDto userDto) {
+        return userService.updateUser(userId, userDto).toUserDto();
     }
 
     @DeleteMapping
