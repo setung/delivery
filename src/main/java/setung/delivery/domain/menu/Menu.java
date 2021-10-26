@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import setung.delivery.domain.BaseEntity;
 import setung.delivery.domain.restaurant.Restaurant;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Menu {
+public class Menu extends BaseEntity {
 
     @Id
     @GeneratedValue

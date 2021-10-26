@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import setung.delivery.domain.BaseEntity;
 import setung.delivery.domain.restaurant.Restaurant;
 
 import javax.persistence.*;
@@ -15,7 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Owner {
+public class Owner extends BaseEntity {
 
     @Id
     @GeneratedValue
