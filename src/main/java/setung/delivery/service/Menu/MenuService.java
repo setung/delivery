@@ -27,4 +27,8 @@ public class MenuService {
 
         return menuRepository.save(menuDto.toMenu());
     }
+
+    public Menu findByIdAndRestaurantId(long menuId, long restaurantId) {
+        return menuRepository.findByIdAndRestaurantId(menuId, restaurantId);
+    }
 }
