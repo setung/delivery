@@ -5,5 +5,7 @@ import org.springframework.stereotype.Repository;
 import setung.delivery.domain.menu.Menu;
 
 @Repository
-public interface MenuRepository extends JpaRepository<Menu,Long> {
+public interface MenuRepository extends JpaRepository<Menu, Long> {
+
+    Menu findByIdAndRestaurantId(long menuId, long restaurantId);
 }
