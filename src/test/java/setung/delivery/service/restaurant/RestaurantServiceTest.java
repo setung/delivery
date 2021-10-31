@@ -1,90 +1,73 @@
 package setung.delivery.service.restaurant;
 
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+import setung.delivery.domain.menu.Menu;
+import setung.delivery.domain.menu.MenuDto;
 import setung.delivery.domain.owner.Owner;
 import setung.delivery.domain.restaurant.Restaurant;
-import setung.delivery.domain.restaurant.RestaurantCategory;
 import setung.delivery.domain.restaurant.RestaurantDto;
-import setung.delivery.exception.CustomException;
+import setung.delivery.domain.user.User;
 import setung.delivery.repository.OwnerRepository;
-import setung.delivery.repository.RestaurantRepository;
+import setung.delivery.repository.UserRepository;
+import setung.delivery.service.Menu.MenuService;
 
-import java.time.LocalTime;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
-class RestaurantServiceTest {
+@SpringBootTest
+@Transactional
+public class RestaurantServiceTest {
 
-    @Mock
-    RestaurantRepository restaurantRepository;
-    @Mock
+    @Autowired
     OwnerRepository ownerRepository;
-
-    @InjectMocks
+    @Autowired
     RestaurantService restaurantService;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    MenuService menuService;
 
-    @Test
-    @DisplayName("정상적인 restaurant 등록")
-    public void registerRestaurant() {
-        //given
-        Owner owner = Owner.builder()
-                .name("jsh")
-                .email("jsh@test.com")
-                .password("1234")
-                .tel("000-0000-0000")
-                .id(1L)
-                .build();
+    User user;
+    Owner owner;
+    Restaurant restaurant;
+    Menu menu1;
+    Menu menu2;
+    Menu menu3;
 
-        RestaurantDto restaurantDto = RestaurantDto.builder()
-                .name("한식당")
-                .address("서울시 강남구 어딘가")
-                .category(RestaurantCategory.KOREAN)
-                .openAt(LocalTime.of(9, 0))
-                .closeAt(LocalTime.of(22, 0))
-                .owner(owner)
-                .tel("00-000-0000")
-                .build();
+    @BeforeEach
+    public void beforeEach() {
+        user = User.builder().build();
+        owner = Owner.builder().build();
+        RestaurantDto restaurantDto = RestaurantDto.builder().build();
+        MenuDto menuDto1 = MenuDto.builder().quantity(1).name("menu1").build();
+        MenuDto menuDto2 = MenuDto.builder().quantity(2).name("menu2").build();
+        MenuDto menuDto3 = MenuDto.builder().quantity(3).name("menu3").build();
 
-        Restaurant restaurant = restaurantDto.toRestaurant();
-
-        when(ownerRepository.findById(any())).thenReturn(java.util.Optional.ofNullable(owner));
-        when(restaurantRepository.save(any())).thenReturn(restaurant);
-
-        //when
-        Restaurant registerRestaurant = restaurantService.register(owner.getId(), restaurantDto);
-
-        //then
-        Assertions.assertThat(registerRestaurant.getName()).isEqualTo(restaurantDto.getName());
-        verify(restaurantRepository, times(1)).save(any(Restaurant.class));
-        verify(ownerRepository, times(1)).findById(any(Long.class));
+        userRepository.save(user);
+        ownerRepository.save(owner);
+        restaurant = restaurantService.register(owner.getId(), restaurantDto);
+        menu1 = menuService.registerMenu(owner.getId(), restaurant.getId(), menuDto1);
+        menu2 = menuService.registerMenu(owner.getId(), restaurant.getId(), menuDto2);
+        menu3 = menuService.registerMenu(owner.getId(), restaurant.getId(), menuDto3);
     }
 
     @Test
-    @DisplayName("owner가 로그인 되어 있지 않을 때 식당 등록시 예외 발생")
-    public void registerRestaurantWithWrongOwner() {
-        //given
-        RestaurantDto restaurantDto = RestaurantDto.builder()
-                .name("한식당")
-                .address("서울시 강남구 어딘가")
-                .category(RestaurantCategory.KOREAN)
-                .openAt(LocalTime.of(9, 0))
-                .closeAt(LocalTime.of(22, 0))
-                .tel("00-000-0000")
-                .build();
+    public void deleteRestaurant() {
+        Restaurant beforeRestaurant = restaurantService.findRestaurantById(restaurant.getId());
+        assertThat(beforeRestaurant).isNotNull();
 
-        when(ownerRepository.findById(any())).thenThrow(CustomException.class);
+        restaurantService.deleteRestaurant(owner.getId(), restaurant.getId());
 
-        assertThrows(CustomException.class, () -> restaurantService.register(1L, restaurantDto));
+        List<Menu> menus = menuService.findAllByRestaurantId(restaurant.getId());
+        Restaurant afterRestaurant = restaurantService.findRestaurantById(restaurant.getId());
+
+        assertThat(afterRestaurant).isNull();
+        assertThat(menus.size()).isEqualTo(0);
     }
 }
