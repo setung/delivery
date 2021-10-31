@@ -1,81 +1,83 @@
 package setung.delivery.service.Menu;
 
-import org.junit.jupiter.api.DisplayName;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import setung.delivery.domain.menu.Menu;
-import setung.delivery.domain.menu.MenuCategory;
 import setung.delivery.domain.menu.MenuDto;
+import setung.delivery.domain.owner.Owner;
 import setung.delivery.domain.restaurant.Restaurant;
-import setung.delivery.exception.CustomException;
-import setung.delivery.repository.MenuRepository;
-import setung.delivery.repository.RestaurantRepository;
+import setung.delivery.domain.restaurant.RestaurantDto;
+import setung.delivery.domain.user.User;
+import setung.delivery.repository.OwnerRepository;
+import setung.delivery.repository.UserRepository;
+import setung.delivery.service.basket.BasketService;
+import setung.delivery.service.restaurant.RestaurantService;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import java.util.List;
 
-@ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
-class MenuServiceTest {
+import static org.assertj.core.api.Assertions.*;
 
-    @Mock
-    MenuRepository menuRepository;
+@SpringBootTest
+public class MenuServiceTest {
 
-    @Mock
-    RestaurantRepository restaurantRepository;
-
-    @InjectMocks
+    @Autowired
+    OwnerRepository ownerRepository;
+    @Autowired
+    RestaurantService restaurantService;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
     MenuService menuService;
 
+    User user;
+    Owner owner;
+    Restaurant restaurant;
+    Menu menu1;
+    Menu menu2;
+    Menu menu3;
+
+    @BeforeEach
+    public void beforeEach() {
+        user = User.builder().build();
+        owner = Owner.builder().build();
+        RestaurantDto restaurantDto = RestaurantDto.builder().build();
+        MenuDto menuDto1 = MenuDto.builder().quantity(1).name("menu1").build();
+        MenuDto menuDto2 = MenuDto.builder().quantity(2).name("menu2").build();
+        MenuDto menuDto3 = MenuDto.builder().quantity(3).name("menu3").build();
+
+        userRepository.save(user);
+        ownerRepository.save(owner);
+        restaurant = restaurantService.register(owner.getId(), restaurantDto);
+        menu1 = menuService.registerMenu(owner.getId(), restaurant.getId(), menuDto1);
+        menu2 = menuService.registerMenu(owner.getId(), restaurant.getId(), menuDto2);
+        menu3 = menuService.registerMenu(owner.getId(), restaurant.getId(), menuDto3);
+    }
+    
     @Test
-    @DisplayName("정상적인 메뉴 등록")
-    public void registerMenu() {
-        //given
-        Restaurant restaurant = Restaurant.builder().build();
+    public void deleteMenu() {
+        List<Menu> beforeMenus = menuService.findAllByRestaurantId(restaurant.getId());
 
-        MenuDto menuDto = MenuDto.builder()
-                .name("된장찌개")
-                .price(1000)
-                .quantity(5)
-                .category(MenuCategory.MAIN)
-                .build();
+        assertThat(beforeMenus.size()).isEqualTo(3);
 
-        //when
-        when(restaurantRepository.findByIdAndOwnerId(any(Long.class),any(Long.class))).thenReturn(restaurant);
-        when(menuRepository.save(any())).thenReturn(menuDto.toMenu());
+        menuService.deleteMenu(owner.getId(), restaurant.getId(), menu1.getId());
 
-        Menu savedMenu = menuService.registerMenu(any(Long.class), any(Long.class), menuDto);
+        List<Menu> afterMenus = menuService.findAllByRestaurantId(restaurant.getId());
 
-        //then
-        assertThat(savedMenu.getName()).isEqualTo(menuDto.getName());
-        verify(restaurantRepository, times(1)).findByIdAndOwnerId(any(Long.class),any(Long.class));
-        verify(menuRepository, times(1)).save(any());
+        assertThat(afterMenus.size()).isEqualTo(2);
     }
 
     @Test
-    @DisplayName("OwnerId와 RestaurantId가 잘 못 입력시 예외 발생")
-    public void registerMenuWithWrongOwnerOrRestaurant() {
-        //given
-        MenuDto menuDto = MenuDto.builder()
-                .name("된장찌개")
-                .price(1000)
-                .quantity(5)
-                .category(MenuCategory.MAIN)
-                .build();
+    public void deleteMenuById() {
+        menuService.deleteMenu(owner.getId(), restaurant.getId(), menu1.getId());
 
-        //when
-        when(restaurantRepository.findByIdAndOwnerId(any(Long.class),any(Long.class))).thenReturn(null);
-        when(menuRepository.save(any())).thenReturn(menuDto.toMenu());
+        List<Menu> menus = menuService.findAllByRestaurantId(restaurant.getId());
 
-        //then
-        assertThrows(CustomException.class,()->{
-            menuService.registerMenu(any(Long.class), any(Long.class), menuDto);
-        });
+        assertThat(menus.size()).isEqualTo(2);
+        assertThat(menus.get(0).getName()).isEqualTo("menu2");
+        assertThat(menus.get(1).getName()).isEqualTo("menu3");
     }
+
 }
