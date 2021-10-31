@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.domain.owner.Owner;
 import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.domain.restaurant.RestaurantCategory;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class RestaurantService {
 
     private final RestaurantRepository restaurantRepository;

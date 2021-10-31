@@ -33,4 +33,9 @@ public class RestaurantController {
             return restaurantService.findRestaurants(category, pageable).map(Restaurant::toRestaurantDto);
         }
     }
+
+    @DeleteMapping("/{restaurantId}")
+    public void deleteRestaurant(@LoginOwnerId long ownerId,@PathVariable long restaurantId) {
+        restaurantService.deleteRestaurant(ownerId, restaurantId);
+    }
 }
