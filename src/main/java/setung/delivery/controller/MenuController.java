@@ -15,9 +15,19 @@ public class MenuController {
 
     @PostMapping
     public MenuDto registerMenu(@LoginOwnerId long ownerId,
-                             @PathVariable long restaurantId,
-                             @RequestBody MenuDto menuDto) {
+                                @PathVariable long restaurantId,
+                                @RequestBody MenuDto menuDto) {
         return menuService.registerMenu(ownerId, restaurantId, menuDto).toMenuDto();
+    }
+
+    @DeleteMapping
+    public void deleteAllMenu(@LoginOwnerId long ownerId, @PathVariable long restaurantId) {
+        menuService.deleteAllMenu(ownerId, restaurantId);
+    }
+
+    @DeleteMapping("/{menuId}")
+    public void deleteAllMenu(@LoginOwnerId long ownerId, @PathVariable long restaurantId, @PathVariable long menuId) {
+        menuService.deleteMenu(ownerId, restaurantId, menuId);
     }
 
 }

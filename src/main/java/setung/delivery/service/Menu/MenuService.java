@@ -10,6 +10,8 @@ import setung.delivery.exception.ErrorCode;
 import setung.delivery.repository.MenuRepository;
 import setung.delivery.repository.RestaurantRepository;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class MenuService {
@@ -30,5 +32,27 @@ public class MenuService {
 
     public Menu findByIdAndRestaurantId(long menuId, long restaurantId) {
         return menuRepository.findByIdAndRestaurantId(menuId, restaurantId);
+    }
+
+    public void deleteAllMenu(long ownerId, long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findByIdAndOwnerId(restaurantId, ownerId);
+
+        if (restaurant == null)
+            throw new CustomException(ErrorCode.NOT_FOUND_RESTAURANT);
+
+        menuRepository.deleteByRestaurantId(restaurantId);
+    }
+
+    public void deleteMenu(long ownerId, long restaurantId, long menuId) {
+        Restaurant restaurant = restaurantRepository.findByIdAndOwnerId(restaurantId, ownerId);
+
+        if (restaurant == null)
+            throw new CustomException(ErrorCode.NOT_FOUND_RESTAURANT);
+
+        menuRepository.deleteById(menuId);
+    }
+
+    public List<Menu> findAllByRestaurantId(long restaurantId) {
+        return menuRepository.findAllByRestaurantId(restaurantId);
     }
 }
