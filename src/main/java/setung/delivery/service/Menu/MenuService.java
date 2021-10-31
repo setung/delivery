@@ -2,6 +2,7 @@ package setung.delivery.service.Menu;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.domain.menu.Menu;
 import setung.delivery.domain.menu.MenuDto;
 import setung.delivery.domain.restaurant.Restaurant;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class MenuService {
 
     private final MenuRepository menuRepository;
