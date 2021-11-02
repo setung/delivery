@@ -33,7 +33,12 @@ public class MenuService {
     }
 
     public Menu findByIdAndRestaurantId(long menuId, long restaurantId) {
-        return menuRepository.findByIdAndRestaurantId(menuId, restaurantId);
+        Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId);
+
+        if (menu == null)
+            throw new CustomException(ErrorCode.NOT_FOUND_MENU);
+
+        return menu;
     }
 
     public void deleteAllMenu(long ownerId, long restaurantId) {

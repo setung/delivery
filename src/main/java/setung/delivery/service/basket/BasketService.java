@@ -67,6 +67,10 @@ public class BasketService {
         String key = getBasketKey(userId, restaurantId);
 
         List<BasketMenu> basketMenus = ops.range(key, 0, ops.size(key) - 1);
+
+        if (basketMenus.isEmpty())
+            throw new CustomException(ErrorCode.NOT_FOUND_BASKET);
+
         return basketMenus;
     }
 

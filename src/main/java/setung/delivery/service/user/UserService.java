@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import setung.delivery.domain.user.User;
 import setung.delivery.domain.user.UserDto;
+import setung.delivery.exception.CustomException;
+import setung.delivery.exception.ErrorCode;
 import setung.delivery.repository.UserRepository;
 import setung.delivery.utils.SHA256;
 
@@ -32,6 +34,15 @@ public class UserService {
         user.updateUser(userDto);
         userRepository.save(user);
         return user;
+    }
+
+    public User findUserById(long userId) {
+        Optional<User> user = userRepository.findById(userId);
+
+        if (!user.isPresent())
+            throw new CustomException(ErrorCode.NOT_FOUND_USER);
+
+        return user.get();
     }
 
     public void deleteUser(long userId) {
