@@ -9,6 +9,8 @@ import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.domain.user.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,10 +37,22 @@ public class Order extends BaseEntity {
     private OrderStatus status;
 
     private String address;
-
     private int totalPrice;
 
     public void updateTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public OrderDto toOrderDto() {
+        return OrderDto.builder()
+                .id(id)
+                .user(user)
+                .restaurant(restaurant)
+                .status(status)
+                .address(address)
+                .totalPrice(totalPrice)
+                .createdAt(getCreatedAt())
+                .build();
+
     }
 }

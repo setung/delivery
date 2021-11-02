@@ -13,7 +13,8 @@ import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.domain.user.User;
 import setung.delivery.exception.CustomException;
 import setung.delivery.exception.ErrorCode;
-import setung.delivery.repository.*;
+import setung.delivery.repository.OrderMenuRepository;
+import setung.delivery.repository.OrderRepository;
 import setung.delivery.service.Menu.MenuService;
 import setung.delivery.service.basket.BasketService;
 import setung.delivery.service.restaurant.RestaurantService;
@@ -70,5 +71,14 @@ public class OrderService {
 
         basketService.clearBasket(userId, restaurantId); // 주문 완료후 장바구니 삭제
         order.updateTotalPrice(totalPrice);
+    }
+
+    public Order findOrderById(long userId, long orderId) {
+        Order order = orderRepository.findByOrderIdAndUserId(orderId, userId);
+
+        if (order == null)
+            throw new CustomException(ErrorCode.NOT_FOUND_ORDER);
+
+        return order;
     }
 }
