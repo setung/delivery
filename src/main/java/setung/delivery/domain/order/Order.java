@@ -37,4 +37,8 @@ public class Order extends BaseEntity {
     private String address;
 
     private int totalPrice;
+
+    public void updateTotalPrice(int totalPrice) {
+        this.totalPrice = totalPrice;
+    }
 }
