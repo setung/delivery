@@ -16,6 +16,7 @@ import setung.delivery.repository.OwnerRepository;
 import setung.delivery.repository.RestaurantRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -42,7 +43,12 @@ public class RestaurantService {
     }
 
     public Restaurant findRestaurantById(long restaurantId) {
-        return restaurantRepository.findById(restaurantId).orElse(null);
+        Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
+
+        if(!restaurant.isPresent())
+            throw new CustomException(ErrorCode.NOT_FOUND_RESTAURANT);
+
+        return restaurant.get();
     }
 
     public void deleteRestaurant(long ownerId, long restaurantId) {

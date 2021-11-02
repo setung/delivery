@@ -44,4 +44,8 @@ public class Menu extends BaseEntity {
                 .updatedAt(getUpdatedAt())
                 .build();
     }
+
+    public void updateQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }
