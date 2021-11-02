@@ -1,14 +1,13 @@
 package setung.delivery.service.order;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.domain.basket.BasketMenu;
 import setung.delivery.domain.menu.Menu;
-import setung.delivery.domain.order.Order;
-import setung.delivery.domain.order.OrderMenu;
-import setung.delivery.domain.order.OrderStatus;
-import setung.delivery.domain.order.RequestOrder;
+import setung.delivery.domain.order.*;
 import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.domain.user.User;
 import setung.delivery.exception.CustomException;
@@ -42,7 +41,7 @@ public class OrderService {
         int totalPrice = 0;
 
         Order order = Order.builder()
-                .status(OrderStatus.BEFORE_PAYMENT)
+                .orderStatus(OrderStatus.BEFORE_PAYMENT)
                 .address(requestOrder.getAddress())
                 .restaurant(restaurant)
                 .user(user)
@@ -80,5 +79,13 @@ public class OrderService {
             throw new CustomException(ErrorCode.NOT_FOUND_ORDER);
 
         return order;
+    }
+
+    public Page<Order> findOrders(long userId, Pageable pageable) {
+        return orderRepository.findOrderByUserId(userId, pageable);
+    }
+
+    public Page<Order> findOrders(long userId, OrderStatus orderStatus, Pageable pageable) {
+        return orderRepository.findOrderByUserIdAndOrderStatus(userId, orderStatus, pageable);
     }
 }

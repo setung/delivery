@@ -34,7 +34,7 @@ public class Order extends BaseEntity {
     private Restaurant restaurant;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private OrderStatus orderStatus;
 
     private String address;
     private int totalPrice;
@@ -48,11 +48,10 @@ public class Order extends BaseEntity {
                 .id(id)
                 .user(user)
                 .restaurant(restaurant)
-                .status(status)
+                .status(orderStatus)
                 .address(address)
                 .totalPrice(totalPrice)
                 .createdAt(getCreatedAt())
                 .build();
-
     }
 }
