@@ -1,19 +1,19 @@
 package setung.delivery.service.order;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.domain.basket.BasketMenu;
 import setung.delivery.domain.menu.Menu;
-import setung.delivery.domain.order.Order;
-import setung.delivery.domain.order.OrderMenu;
-import setung.delivery.domain.order.OrderStatus;
-import setung.delivery.domain.order.RequestOrder;
+import setung.delivery.domain.order.*;
 import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.domain.user.User;
 import setung.delivery.exception.CustomException;
 import setung.delivery.exception.ErrorCode;
-import setung.delivery.repository.*;
+import setung.delivery.repository.OrderMenuRepository;
+import setung.delivery.repository.OrderRepository;
 import setung.delivery.service.Menu.MenuService;
 import setung.delivery.service.basket.BasketService;
 import setung.delivery.service.restaurant.RestaurantService;
@@ -41,7 +41,7 @@ public class OrderService {
         int totalPrice = 0;
 
         Order order = Order.builder()
-                .status(OrderStatus.BEFORE_PAYMENT)
+                .orderStatus(OrderStatus.BEFORE_PAYMENT)
                 .address(requestOrder.getAddress())
                 .restaurant(restaurant)
                 .user(user)
@@ -70,5 +70,22 @@ public class OrderService {
 
         basketService.clearBasket(userId, restaurantId); // 주문 완료후 장바구니 삭제
         order.updateTotalPrice(totalPrice);
+    }
+
+    public Order findOrderById(long userId, long orderId) {
+        Order order = orderRepository.findByOrderIdAndUserId(orderId, userId);
+
+        if (order == null)
+            throw new CustomException(ErrorCode.NOT_FOUND_ORDER);
+
+        return order;
+    }
+
+    public Page<Order> findOrders(long userId, Pageable pageable) {
+        return orderRepository.findOrderByUserId(userId, pageable);
+    }
+
+    public Page<Order> findOrders(long userId, OrderStatus orderStatus, Pageable pageable) {
+        return orderRepository.findOrderByUserIdAndOrderStatus(userId, orderStatus, pageable);
     }
 }
