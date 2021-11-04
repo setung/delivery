@@ -12,23 +12,23 @@ import setung.delivery.domain.order.RequestOrder;
 import setung.delivery.service.order.OrderService;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping
 @RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping
+    @PostMapping("/orders")
     public void order(@LoginUserId long userId, @RequestBody RequestOrder requestOrder) {
         orderService.order(userId, requestOrder);
     }
 
-    @GetMapping("/{orderId}")
+    @GetMapping("/users/{orderId}")
     public OrderDto findOrderById(@LoginUserId long userId, @PathVariable long orderId) {
         return orderService.findOrderById(userId, orderId).toOrderDto();
     }
 
-    @GetMapping
+    @GetMapping("/users/orders")
     public Page<OrderDto> findAll(@LoginUserId long userId, @RequestParam(required = false) OrderStatus orderStatus, Pageable pageable) {
         if (orderStatus == null) {
             return orderService.findOrders(userId, pageable).map(Order::toOrderDto);
