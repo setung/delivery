@@ -40,11 +40,16 @@ public class OrderController {
 
     @PostMapping("/restaurants/{restaurantId}/orders/{orderId}/approve")
     public void approveOrder(@LoginOwnerId long ownerId, @PathVariable long restaurantId, @PathVariable long orderId) {
-        orderService.approveOrder(ownerId,restaurantId,orderId);
+        orderService.approveOrder(ownerId, restaurantId, orderId);
     }
 
     @PostMapping("/restaurants/{restaurantId}/orders/{orderId}/refuse")
     public void refuseOrder(@LoginOwnerId long ownerId, @PathVariable long restaurantId, @PathVariable long orderId) {
-        orderService.refuseOrder(ownerId,restaurantId,orderId);
+        orderService.refuseOrder(ownerId, restaurantId, orderId);
+    }
+
+    @PostMapping("/orders/{orderId}/cancel")
+    public void cancelOrder(@LoginUserId long userId, @PathVariable long orderId) {
+        orderService.cancelOrder(userId, orderId);
     }
 }
