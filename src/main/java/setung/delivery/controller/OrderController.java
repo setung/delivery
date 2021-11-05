@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
+import setung.delivery.argumentresolver.LoginOwnerId;
 import setung.delivery.argumentresolver.LoginUserId;
 import setung.delivery.domain.order.Order;
 import setung.delivery.domain.order.OrderDto;
@@ -35,5 +36,15 @@ public class OrderController {
         } else {
             return orderService.findOrders(userId, orderStatus, pageable).map(Order::toOrderDto);
         }
+    }
+
+    @PostMapping("/restaurants/{restaurantId}/orders/{orderId}/approve")
+    public void approveOrder(@LoginOwnerId long ownerId, @PathVariable long restaurantId, @PathVariable long orderId) {
+        orderService.approveOrder(ownerId,restaurantId,orderId);
+    }
+
+    @PostMapping("/restaurants/{restaurantId}/orders/{orderId}/refuse")
+    public void refuseOrder(@LoginOwnerId long ownerId, @PathVariable long restaurantId, @PathVariable long orderId) {
+        orderService.refuseOrder(ownerId,restaurantId,orderId);
     }
 }

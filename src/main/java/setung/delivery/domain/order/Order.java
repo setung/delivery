@@ -43,6 +43,10 @@ public class Order extends BaseEntity {
         this.totalPrice = totalPrice;
     }
 
+    public void updateOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
     public OrderDto toOrderDto() {
         return OrderDto.builder()
                 .id(id)

@@ -45,7 +45,7 @@ public class RestaurantService {
     public Restaurant findRestaurantById(long restaurantId) {
         Optional<Restaurant> restaurant = restaurantRepository.findById(restaurantId);
 
-        if(!restaurant.isPresent())
+        if (!restaurant.isPresent())
             throw new CustomException(ErrorCode.NOT_FOUND_RESTAURANT);
 
         return restaurant.get();
@@ -59,5 +59,14 @@ public class RestaurantService {
 
         menuRepository.deleteByRestaurantId(restaurantId);
         restaurantRepository.deleteById(restaurantId);
+    }
+
+    public Restaurant findRestaurantByIdAndOwnerId(long ownerId, long restaurantId) {
+        Restaurant restaurant = restaurantRepository.findByIdAndOwnerId(restaurantId, ownerId);
+
+        if (restaurant == null)
+            throw new CustomException(ErrorCode.NOT_FOUND_RESTAURANT);
+
+        return restaurant;
     }
 }
