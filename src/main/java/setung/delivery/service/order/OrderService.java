@@ -117,4 +117,15 @@ public class OrderService {
 
         return order;
     }
+
+    public void cancelOrder(long userId, long orderId) {
+        Order order = orderRepository.findByOrderIdAndUserId(orderId, userId);
+
+        if (order == null)
+            throw new CustomException(ErrorCode.NOT_FOUND_ORDER);
+        if (order.getOrderStatus() != OrderStatus.ORDER_REQUEST)
+            throw new CustomException(ErrorCode.BAD_REQUEST_ORDER);
+
+        order.updateOrderStatus(OrderStatus.ORDER_CANCEL);
+    }
 }
