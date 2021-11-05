@@ -108,7 +108,7 @@ class OrderServiceTest {
     private void updateQuantity() {
         menu1.updateQuantity(0);
     }
-    
+
     @Test
     @DisplayName("정상적으로 주문을 승인한다.")
     public void approveOrder() {
@@ -122,7 +122,7 @@ class OrderServiceTest {
         Order order = content.get(0);
 
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_REQUEST);
-        orderService.approveOrder(owner.getId(),restaurant.getId(), order.getId());
+        orderService.approveOrder(owner.getId(), restaurant.getId(), order.getId());
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_APPROVAL);
     }
 
@@ -141,7 +141,7 @@ class OrderServiceTest {
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_REQUEST);
         order.updateOrderStatus(OrderStatus.DELIVERY_COMPLETE);
 
-        assertThrows(CustomException.class,()-> orderService.approveOrder(owner.getId(),restaurant.getId(), order.getId()));
+        assertThrows(CustomException.class, () -> orderService.approveOrder(owner.getId(), restaurant.getId(), order.getId()));
     }
 
     @Test
@@ -157,7 +157,7 @@ class OrderServiceTest {
         Order order = content.get(0);
 
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_REQUEST);
-        orderService.refuseOrder(owner.getId(),restaurant.getId(), order.getId());
+        orderService.refuseOrder(owner.getId(), restaurant.getId(), order.getId());
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_CANCEL);
     }
 
@@ -176,6 +176,41 @@ class OrderServiceTest {
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_REQUEST);
         order.updateOrderStatus(OrderStatus.DELIVERY_COMPLETE);
 
-        assertThrows(CustomException.class,()-> orderService.refuseOrder(owner.getId(),restaurant.getId(), order.getId()));
+        assertThrows(CustomException.class, () -> orderService.refuseOrder(owner.getId(), restaurant.getId(), order.getId()));
+    }
+
+    @Test
+    @DisplayName("정상적으로 주문 취소")
+    public void cancelOrder() {
+        BasketMenu basketMenu1 = BasketMenu.builder().quantity(2).menuId(menu1.getId()).build();
+        basketService.addMenuInBasket(user.getId(), restaurant.getId(), basketMenu1);
+        RequestOrder requestOrder = RequestOrder.builder().address("어딘가").restaurantId(restaurant.getId()).build();
+
+        orderService.order(user.getId(), requestOrder);
+
+        List<Order> content = orderService.findOrders(user.getId(), null).getContent();
+        Order order = content.get(0);
+
+        assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_REQUEST);
+        orderService.cancelOrder(user.getId() , order.getId());
+        assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_CANCEL);
+    }
+
+    @Test
+    @DisplayName("특정 주문 상태에 주문 취소시 예외를 발생한다.")
+    public void cancelOrderWrongOrderStatus() {
+        BasketMenu basketMenu1 = BasketMenu.builder().quantity(2).menuId(menu1.getId()).build();
+        basketService.addMenuInBasket(user.getId(), restaurant.getId(), basketMenu1);
+        RequestOrder requestOrder = RequestOrder.builder().address("어딘가").restaurantId(restaurant.getId()).build();
+
+        orderService.order(user.getId(), requestOrder);
+
+        List<Order> content = orderService.findOrders(user.getId(), null).getContent();
+        Order order = content.get(0);
+
+        assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_REQUEST);
+        order.updateOrderStatus(OrderStatus.DELIVERY_COMPLETE);
+
+        assertThrows(CustomException.class, () -> orderService.cancelOrder(user.getId(), order.getId()));
     }
 }
