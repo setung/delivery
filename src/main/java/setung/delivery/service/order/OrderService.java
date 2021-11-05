@@ -41,7 +41,7 @@ public class OrderService {
         int totalPrice = 0;
 
         Order order = Order.builder()
-                .orderStatus(OrderStatus.BEFORE_PAYMENT)
+                .orderStatus(OrderStatus.ORDER_REQUEST)
                 .address(requestOrder.getAddress())
                 .restaurant(restaurant)
                 .user(user)
@@ -87,5 +87,34 @@ public class OrderService {
 
     public Page<Order> findOrders(long userId, OrderStatus orderStatus, Pageable pageable) {
         return orderRepository.findOrderByUserIdAndOrderStatus(userId, orderStatus, pageable);
+    }
+
+    public void approveOrder(long ownerId, long restaurantId, long orderId) {
+        restaurantService.findRestaurantByIdAndOwnerId(ownerId, restaurantId);
+        Order order = findByIdAndRestaurantId(orderId, restaurantId);
+
+        if (order.getOrderStatus() != OrderStatus.ORDER_REQUEST && order.getOrderStatus() != OrderStatus.ORDER_CANCEL)
+            throw new CustomException(ErrorCode.BAD_REQUEST_ORDER);
+
+        order.updateOrderStatus(OrderStatus.ORDER_APPROVAL);
+    }
+
+    public void refuseOrder(long ownerId, long restaurantId, long orderId) {
+        restaurantService.findRestaurantByIdAndOwnerId(ownerId, restaurantId);
+        Order order = findByIdAndRestaurantId(orderId, restaurantId);
+
+        if (order.getOrderStatus() != OrderStatus.ORDER_REQUEST && order.getOrderStatus() != OrderStatus.ORDER_APPROVAL)
+            throw new CustomException(ErrorCode.BAD_REQUEST_ORDER);
+
+        order.updateOrderStatus(OrderStatus.ORDER_CANCEL);
+    }
+
+    public Order findByIdAndRestaurantId(long orderId, long restaurantId) {
+        Order order = orderRepository.findByIdAndRestaurantId(orderId, restaurantId);
+
+        if (order == null)
+            throw new CustomException(ErrorCode.NOT_FOUND_ORDER);
+
+        return order;
     }
 }
