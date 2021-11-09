@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import setung.delivery.domain.BaseEntity;
 import setung.delivery.domain.restaurant.Restaurant;
+import setung.delivery.domain.rider.Rider;
 import setung.delivery.domain.user.User;
 
 import javax.persistence.*;
@@ -32,6 +33,10 @@ public class Order extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
+
+    @ManyToOne
+    @JoinColumn(name = "rider_id")
+    private Rider rider;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
