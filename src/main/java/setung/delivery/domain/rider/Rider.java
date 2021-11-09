@@ -36,4 +36,15 @@ public class Rider extends BaseEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "rider", fetch = FetchType.LAZY)
     List<Order> orders = new ArrayList<>();
+
+    public RiderDto toRiderDto() {
+        return RiderDto.builder()
+                .id(id)
+                .email(email)
+                .tel(tel)
+                .name(name)
+                .address(address)
+                .password(password)
+                .build();
+    }
 }
