@@ -59,4 +59,14 @@ public class Restaurant extends BaseEntity {
                 .updatedAt(getUpdatedAt())
                 .build();
     }
+
+    public void update(UpdatedRestaurantDto dto) {
+        name = dto.getName();
+        address = dto.getAddress();
+        tel = dto.getTel();
+        status = dto.getStatus();
+        openAt = dto.getOpenAt();
+        closeAt = dto.getCloseAt();
+        category = dto.getCategory();
+    }
 }

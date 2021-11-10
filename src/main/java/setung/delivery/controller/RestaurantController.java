@@ -8,6 +8,7 @@ import setung.delivery.argumentresolver.LoginOwnerId;
 import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.domain.restaurant.RestaurantCategory;
 import setung.delivery.domain.restaurant.RestaurantDto;
+import setung.delivery.domain.restaurant.UpdatedRestaurantDto;
 import setung.delivery.service.restaurant.RestaurantService;
 
 @RestController
@@ -35,7 +36,13 @@ public class RestaurantController {
     }
 
     @DeleteMapping("/{restaurantId}")
-    public void deleteRestaurant(@LoginOwnerId long ownerId,@PathVariable long restaurantId) {
+    public void deleteRestaurant(@LoginOwnerId long ownerId, @PathVariable long restaurantId) {
         restaurantService.deleteRestaurant(ownerId, restaurantId);
+    }
+
+    @PutMapping("/{restaurantId}")
+    public void updateRestaurant(@LoginOwnerId long ownerId, @PathVariable long restaurantId, @RequestBody UpdatedRestaurantDto updatedRestaurantDto) {
+        Restaurant restaurant = restaurantService.findRestaurantByIdAndOwnerId(ownerId, restaurantId);
+        restaurantService.updateRestaurant(restaurant, updatedRestaurantDto);
     }
 }
