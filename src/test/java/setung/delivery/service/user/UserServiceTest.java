@@ -2,25 +2,12 @@ package setung.delivery.service.user;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import setung.delivery.domain.user.User;
-import setung.delivery.domain.user.UserDto;
-import setung.delivery.repository.UserRepository;
-import setung.delivery.utils.SHA256;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import setung.delivery.domain.user.model.User;
+import setung.delivery.controller.user.dto.UserDto;
+import setung.delivery.domain.user.service.UserService;
 
 @SpringBootTest
 @Transactional

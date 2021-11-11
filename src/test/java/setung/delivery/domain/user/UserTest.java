@@ -3,13 +3,12 @@ package setung.delivery.domain.user;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import setung.delivery.controller.user.dto.UserDto;
+import setung.delivery.domain.user.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

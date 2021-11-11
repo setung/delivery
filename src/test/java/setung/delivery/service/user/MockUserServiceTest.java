@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import setung.delivery.domain.user.User;
-import setung.delivery.repository.UserRepository;
+import setung.delivery.domain.user.model.User;
+import setung.delivery.domain.user.repository.UserRepository;
+import setung.delivery.domain.user.service.UserService;
 
 import static org.mockito.Mockito.*;
 

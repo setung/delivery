@@ -7,8 +7,8 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import setung.delivery.domain.user.User;
-import setung.delivery.service.user.UserLoginService;
+import setung.delivery.domain.user.model.User;
+import setung.delivery.domain.user.service.UserLoginService;
 
 @Component
 @AllArgsConstructor
