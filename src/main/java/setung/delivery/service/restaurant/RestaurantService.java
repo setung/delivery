@@ -9,6 +9,7 @@ import setung.delivery.domain.owner.Owner;
 import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.domain.restaurant.RestaurantCategory;
 import setung.delivery.domain.restaurant.RestaurantDto;
+import setung.delivery.domain.restaurant.UpdatedRestaurantDto;
 import setung.delivery.exception.CustomException;
 import setung.delivery.exception.ErrorCode;
 import setung.delivery.repository.MenuRepository;
@@ -68,5 +69,9 @@ public class RestaurantService {
             throw new CustomException(ErrorCode.NOT_FOUND_RESTAURANT);
 
         return restaurant;
+    }
+
+    public void updateRestaurant(Restaurant restaurant, UpdatedRestaurantDto updatedRestaurantDto) {
+        restaurant.update(updatedRestaurantDto);
     }
 }

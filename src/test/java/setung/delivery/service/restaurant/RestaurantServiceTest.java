@@ -11,6 +11,7 @@ import setung.delivery.domain.menu.MenuDto;
 import setung.delivery.domain.owner.Owner;
 import setung.delivery.domain.restaurant.Restaurant;
 import setung.delivery.domain.restaurant.RestaurantDto;
+import setung.delivery.domain.restaurant.UpdatedRestaurantDto;
 import setung.delivery.domain.user.User;
 import setung.delivery.repository.OwnerRepository;
 import setung.delivery.repository.UserRepository;
@@ -69,5 +70,23 @@ public class RestaurantServiceTest {
 
         assertThat(afterRestaurant).isNull();
         assertThat(menus.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void updateRestaurant() {
+        Restaurant restaurant = Restaurant.builder()
+                .name("한식집")
+                .tel("000-0000-0000")
+                .build();
+
+        UpdatedRestaurantDto updatedRestaurantDto = UpdatedRestaurantDto.builder()
+                .name("일식집")
+                .tel("111-1111-1111")
+                .build();
+
+        restaurant.update(updatedRestaurantDto);
+
+        Assertions.assertThat(restaurant.getName()).isEqualTo(updatedRestaurantDto.getName());
+        Assertions.assertThat(restaurant.getTel()).isEqualTo(updatedRestaurantDto.getTel());
     }
 }
