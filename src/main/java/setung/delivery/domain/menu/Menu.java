@@ -48,4 +48,11 @@ public class Menu extends BaseEntity {
     public void updateQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public void updateMenu(MenuDto menuDto) {
+        name = menuDto.getName();
+        price = menuDto.getPrice();
+        quantity = menuDto.getQuantity();
+        category = menuDto.getCategory();
+    }
 }
