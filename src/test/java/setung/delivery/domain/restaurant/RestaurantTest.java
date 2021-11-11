@@ -1,11 +1,11 @@
 package setung.delivery.domain.restaurant;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-import setung.delivery.domain.owner.Owner;
+import setung.delivery.domain.owner.model.Owner;
+import setung.delivery.domain.restaurant.model.Restaurant;
+import setung.delivery.domain.restaurant.model.RestaurantCategory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -14,7 +14,6 @@ import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

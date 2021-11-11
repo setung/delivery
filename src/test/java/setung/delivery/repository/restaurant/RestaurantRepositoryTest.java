@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import setung.delivery.domain.owner.Owner;
-import setung.delivery.domain.restaurant.Restaurant;
-import setung.delivery.domain.restaurant.RestaurantCategory;
-import setung.delivery.repository.RestaurantRepository;
-import setung.delivery.repository.OwnerRepository;
+import setung.delivery.domain.owner.model.Owner;
+import setung.delivery.domain.restaurant.model.Restaurant;
+import setung.delivery.domain.restaurant.model.RestaurantCategory;
+import setung.delivery.domain.restaurant.repository.RestaurantRepository;
+import setung.delivery.domain.owner.repository.OwnerRepository;
 
 import java.time.LocalTime;
 

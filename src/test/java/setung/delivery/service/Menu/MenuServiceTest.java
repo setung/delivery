@@ -5,16 +5,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import setung.delivery.domain.menu.Menu;
-import setung.delivery.domain.menu.MenuDto;
-import setung.delivery.domain.owner.Owner;
-import setung.delivery.domain.restaurant.Restaurant;
-import setung.delivery.domain.restaurant.RestaurantDto;
-import setung.delivery.domain.user.User;
-import setung.delivery.repository.OwnerRepository;
-import setung.delivery.repository.UserRepository;
-import setung.delivery.service.basket.BasketService;
-import setung.delivery.service.restaurant.RestaurantService;
+import setung.delivery.domain.menu.model.Menu;
+import setung.delivery.controller.menu.dto.MenuDto;
+import setung.delivery.domain.menu.service.MenuService;
+import setung.delivery.domain.owner.model.Owner;
+import setung.delivery.domain.restaurant.model.Restaurant;
+import setung.delivery.controller.restaurant.dto.RestaurantDto;
+import setung.delivery.domain.user.model.User;
+import setung.delivery.domain.owner.repository.OwnerRepository;
+import setung.delivery.domain.user.repository.UserRepository;
+import setung.delivery.domain.restaurant.service.RestaurantService;
 
 import java.util.List;
 

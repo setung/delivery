@@ -1,11 +1,12 @@
 package setung.delivery.domain.menu;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import setung.delivery.domain.restaurant.Restaurant;
-import setung.delivery.domain.restaurant.RestaurantCategory;
+import setung.delivery.domain.menu.model.Menu;
+import setung.delivery.domain.menu.model.MenuCategory;
+import setung.delivery.domain.restaurant.model.Restaurant;
+import setung.delivery.domain.restaurant.model.RestaurantCategory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,7 +14,6 @@ import javax.persistence.PersistenceContext;
 import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

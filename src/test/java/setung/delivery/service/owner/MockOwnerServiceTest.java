@@ -1,24 +1,20 @@
 package setung.delivery.service.owner;
 
 import org.junit.jupiter.api.DisplayName;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import setung.delivery.domain.owner.Owner;
-import setung.delivery.repository.OwnerRepository;
-import setung.delivery.domain.owner.OwnerDto;
-import setung.delivery.repository.OwnerRepository;
-import setung.delivery.utils.SHA256;
+import setung.delivery.domain.owner.model.Owner;
+import setung.delivery.domain.owner.repository.OwnerRepository;
+import setung.delivery.controller.owner.dto.OwnerDto;
+import setung.delivery.domain.owner.service.OwnerService;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

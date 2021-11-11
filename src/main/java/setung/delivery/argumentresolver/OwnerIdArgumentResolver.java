@@ -7,8 +7,8 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import setung.delivery.domain.owner.Owner;
-import setung.delivery.service.owner.OwnerLoginService;
+import setung.delivery.domain.owner.model.Owner;
+import setung.delivery.domain.owner.service.OwnerLoginService;
 
 @Component
 @AllArgsConstructor

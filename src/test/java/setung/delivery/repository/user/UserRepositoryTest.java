@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
-import setung.delivery.domain.user.User;
-import setung.delivery.repository.UserRepository;
+import setung.delivery.domain.user.model.User;
+import setung.delivery.domain.user.repository.UserRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

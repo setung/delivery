@@ -9,13 +9,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import setung.delivery.domain.owner.Owner;
-import setung.delivery.domain.restaurant.Restaurant;
-import setung.delivery.domain.restaurant.RestaurantCategory;
-import setung.delivery.domain.restaurant.RestaurantDto;
+import setung.delivery.domain.owner.model.Owner;
+import setung.delivery.domain.restaurant.model.Restaurant;
+import setung.delivery.domain.restaurant.model.RestaurantCategory;
+import setung.delivery.controller.restaurant.dto.RestaurantDto;
+import setung.delivery.domain.restaurant.service.RestaurantService;
 import setung.delivery.exception.CustomException;
-import setung.delivery.repository.OwnerRepository;
-import setung.delivery.repository.RestaurantRepository;
+import setung.delivery.domain.owner.repository.OwnerRepository;
+import setung.delivery.domain.restaurant.repository.RestaurantRepository;
 
 import java.time.LocalTime;
 
