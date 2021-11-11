@@ -62,4 +62,14 @@ public class MenuService {
     public List<Menu> findAllByRestaurantId(long restaurantId) {
         return menuRepository.findAllByRestaurantId(restaurantId);
     }
+
+    public void updateMenu(long ownerId, long restaurantId, long menuId, MenuDto updatedMenu) {
+        Restaurant restaurant = restaurantRepository.findByIdAndOwnerId(restaurantId, ownerId);
+        Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId);
+
+        if (restaurant == null) throw new CustomException(ErrorCode.NOT_FOUND_RESTAURANT);
+        if (menu == null) throw new CustomException(ErrorCode.NOT_FOUND_MENU);
+
+        menu.updateMenu(updatedMenu);
+    }
 }

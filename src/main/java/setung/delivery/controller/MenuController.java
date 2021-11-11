@@ -30,4 +30,9 @@ public class MenuController {
         menuService.deleteMenu(ownerId, restaurantId, menuId);
     }
 
+    @PutMapping("/{menuId}")
+    public void updateMenu(@LoginOwnerId long ownerId, @PathVariable long restaurantId,
+                           @PathVariable long menuId, @RequestBody MenuDto menuDto) {
+        menuService.updateMenu(ownerId, restaurantId, menuId, menuDto);
+    }
 }
