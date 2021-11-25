@@ -21,14 +21,14 @@ public class OwnerDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Owner toOwner() {
-        Owner owner = Owner.builder()
-                .name(this.name)
-                .email(this.email)
-                .address(this.address)
-                .password(this.password)
-                .tel(this.tel)
-                .build();
-        return owner;
+    public OwnerDto(Owner owner) {
+        id = owner.getId();
+        name = owner.getName();
+        email = owner.getEmail();
+        address = owner.getAddress();
+        password = owner.getPassword();
+        tel = owner.getTel();
+        createdAt = owner.getCreatedAt();
+        updatedAt = owner.getUpdatedAt();
     }
 }

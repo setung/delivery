@@ -51,15 +51,13 @@ public class Order extends BaseEntity {
         this.orderStatus = orderStatus;
     }
 
-    public OrderDto toOrderDto() {
-        return OrderDto.builder()
-                .id(id)
-                .user(user)
-                .restaurant(restaurant)
-                .status(orderStatus)
-                .address(address)
-                .totalPrice(totalPrice)
-                .createdAt(getCreatedAt())
-                .build();
+    public Order(OrderDto orderDto) {
+        id = orderDto.getId();
+        user = new User(orderDto.getUser());
+        restaurant = new Restaurant(orderDto.getRestaurant());
+        orderStatus = orderDto.getStatus();
+        address = orderDto.getAddress();
+        totalPrice = orderDto.getTotalPrice();
     }
+
 }

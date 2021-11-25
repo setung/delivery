@@ -15,7 +15,7 @@ public class OwnerService {
 
     public Owner join(OwnerDto ownerDto) {
         ownerDto.setPassword(SHA256.encBySha256(ownerDto.getPassword()));
-        Owner owner = ownerDto.toOwner();
+        Owner owner = new Owner(ownerDto);
         Owner savedOwner = ownerRepository.save(owner);
         return savedOwner;
     }

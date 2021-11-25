@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import setung.delivery.controller.restaurant.dto.RestaurantDto;
 import setung.delivery.domain.menu.model.Menu;
 import setung.delivery.controller.menu.dto.MenuDto;
 import setung.delivery.domain.restaurant.model.Restaurant;
@@ -28,9 +29,9 @@ public class MenuService {
         if (restaurant == null)
             throw new CustomException(ErrorCode.NOT_FOUND_RESTAURANT);
 
-        menuDto.setRestaurant(restaurant);
+        menuDto.setRestaurant(new RestaurantDto(restaurant));
 
-        return menuRepository.save(menuDto.toMenu());
+        return menuRepository.save(new Menu(menuDto));
     }
 
     public Menu findByIdAndRestaurantId(long menuId, long restaurantId) {

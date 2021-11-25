@@ -17,7 +17,7 @@ public class MenuController {
     public MenuDto registerMenu(@LoginOwnerId long ownerId,
                                 @PathVariable long restaurantId,
                                 @RequestBody MenuDto menuDto) {
-        return menuService.registerMenu(ownerId, restaurantId, menuDto).toMenuDto();
+        return new MenuDto(menuService.registerMenu(ownerId, restaurantId, menuDto));
     }
 
     @DeleteMapping
