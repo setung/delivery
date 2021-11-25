@@ -33,17 +33,13 @@ public class Menu extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private MenuCategory category;
 
-    public MenuDto toMenuDto() {
-        return MenuDto.builder()
-                .id(id)
-                .restaurant(restaurant)
-                .name(name)
-                .price(price)
-                .quantity(quantity)
-                .category(category)
-                .createdAt(getCreatedAt())
-                .updatedAt(getUpdatedAt())
-                .build();
+    public Menu(MenuDto menuDto) {
+        id = menuDto.getId();
+        restaurant = new Restaurant(menuDto.getRestaurant());
+        name = menuDto.getName();
+        price = menuDto.getPrice();
+        quantity = menuDto.getQuantity();
+        category = menuDto.getCategory();
     }
 
     public void updateQuantity(int quantity) {

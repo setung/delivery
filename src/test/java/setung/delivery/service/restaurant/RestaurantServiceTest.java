@@ -17,10 +17,12 @@ import setung.delivery.domain.user.model.User;
 import setung.delivery.domain.owner.repository.OwnerRepository;
 import setung.delivery.domain.user.repository.UserRepository;
 import setung.delivery.domain.menu.service.MenuService;
+import setung.delivery.exception.CustomException;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -67,9 +69,9 @@ public class RestaurantServiceTest {
         restaurantService.deleteRestaurant(owner.getId(), restaurant.getId());
 
         List<Menu> menus = menuService.findAllByRestaurantId(restaurant.getId());
-        Restaurant afterRestaurant = restaurantService.findRestaurantById(restaurant.getId());
 
-        assertThat(afterRestaurant).isNull();
+        assertThrows(CustomException.class, () -> restaurantService.findRestaurantById(restaurant.getId()));
+
         assertThat(menus.size()).isEqualTo(0);
     }
 

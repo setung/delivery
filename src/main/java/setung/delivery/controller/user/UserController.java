@@ -17,7 +17,7 @@ public class UserController {
 
     @PostMapping
     public UserDto join(@RequestBody UserDto userDto) {
-        return userService.join(userDto).toUserDto();
+        return new UserDto(userService.join(userDto));
     }
 
     @PostMapping("/login")
@@ -32,12 +32,12 @@ public class UserController {
 
     @GetMapping("/login")
     public UserDto getLoginUser() {
-        return loginService.getLoginUser().toUserDto();
+        return new UserDto(loginService.getLoginUser());
     }
 
     @PutMapping
     public UserDto updateUser(@LoginUserId long userId, @RequestBody UserDto userDto) {
-        return userService.updateUser(userId, userDto).toUserDto();
+        return new UserDto(userService.updateUser(userId, userDto));
     }
 
     @DeleteMapping

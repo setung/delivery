@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import setung.delivery.controller.owner.dto.OwnerDto;
 import setung.delivery.domain.owner.model.Owner;
 import setung.delivery.domain.restaurant.model.Restaurant;
 import setung.delivery.domain.restaurant.model.RestaurantCategory;
@@ -53,11 +54,11 @@ class MockRestaurantServiceTest {
                 .category(RestaurantCategory.KOREAN)
                 .openAt(LocalTime.of(9, 0))
                 .closeAt(LocalTime.of(22, 0))
-                .owner(owner)
+                .owner(new OwnerDto(owner))
                 .tel("00-000-0000")
                 .build();
 
-        Restaurant restaurant = restaurantDto.toRestaurant();
+        Restaurant restaurant = new Restaurant(restaurantDto);
 
         when(ownerRepository.findById(any())).thenReturn(java.util.Optional.ofNullable(owner));
         when(restaurantRepository.save(any())).thenReturn(restaurant);

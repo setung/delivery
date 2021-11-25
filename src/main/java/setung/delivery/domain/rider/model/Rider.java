@@ -38,14 +38,12 @@ public class Rider extends BaseEntity {
     @OneToMany(mappedBy = "rider", fetch = FetchType.LAZY)
     List<Order> orders = new ArrayList<>();
 
-    public RiderDto toRiderDto() {
-        return RiderDto.builder()
-                .id(id)
-                .email(email)
-                .tel(tel)
-                .name(name)
-                .address(address)
-                .password(password)
-                .build();
+    public Rider(RiderDto riderDto) {
+        id = riderDto.getId();
+        email = riderDto.getEmail();
+        tel = riderDto.getTel();
+        name = riderDto.getName();
+        address = riderDto.getAddress();
+        password = riderDto.getPassword();
     }
 }

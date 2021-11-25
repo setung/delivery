@@ -1,9 +1,9 @@
 package setung.delivery.controller.menu.dto;
 
 import lombok.*;
+import setung.delivery.controller.restaurant.dto.RestaurantDto;
 import setung.delivery.domain.menu.model.Menu;
 import setung.delivery.domain.menu.model.MenuCategory;
-import setung.delivery.domain.restaurant.model.Restaurant;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class MenuDto {
 
     private Long id;
-    private Restaurant restaurant;
+    private RestaurantDto restaurant;
     private String name;
     private int price;
     private int quantity;
@@ -23,13 +23,15 @@ public class MenuDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Menu toMenu() {
-        return Menu.builder()
-                .restaurant(restaurant)
-                .name(name)
-                .price(price)
-                .quantity(quantity)
-                .category(category)
-                .build();
+    public MenuDto(Menu menu) {
+        id=menu.getId();
+        restaurant = new RestaurantDto(menu.getRestaurant());
+        name = menu.getName();
+        price = menu.getPrice();
+        quantity = menu.getQuantity();
+        category = menu.getCategory();
+        createdAt = menu.getCreatedAt();
+        updatedAt = menu.getUpdatedAt();
     }
+
 }

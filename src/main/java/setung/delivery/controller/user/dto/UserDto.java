@@ -21,16 +21,15 @@ public class UserDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public User toUser() {
-        User user = User.builder()
-                .name(this.name)
-                .email(this.email)
-                .tel(this.tel)
-                .address(this.address)
-                .password(this.password)
-                .build();
-
-        return user;
+    public UserDto(User user) {
+        id = user.getId();
+        name = user.getName();
+        email = user.getEmail();
+        tel = user.getTel();
+        address = user.getAddress();
+        password = user.getPassword();
+        createdAt = user.getCreatedAt();
+        updatedAt = user.getUpdatedAt();
     }
 
 }

@@ -97,9 +97,8 @@ class BasketServiceTest {
         basketService.addMenuInBasket(user.getId(), restaurant.getId(), new BasketMenu(menu3.getId(), 3));
 
         basketService.clearBasket(user.getId(), restaurant.getId());
-        List<BasketMenu> basketMenus = basketService.findBasketMenus(user.getId(), restaurant.getId());
 
-        assertThat(basketMenus.size()).isEqualTo(0);
+        Assertions.assertThrows(CustomException.class, () -> basketService.findBasketMenus(user.getId(), restaurant.getId()));
     }
 
     @Test
@@ -161,7 +160,7 @@ class BasketServiceTest {
             basketService.updateMenuInBasket(user.getId(), restaurant.getId(), 0, new BasketMenu(menu2.getId(), 1));
         });
     }
-    
+
     @Test
     @DisplayName("정상적으로 BasketMenu 조회")
     public void getBasketMenuByIndex() {

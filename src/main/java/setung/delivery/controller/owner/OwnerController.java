@@ -17,7 +17,7 @@ public class OwnerController {
 
     @PostMapping
     public OwnerDto join(@RequestBody OwnerDto ownerDto) {
-        return ownerService.join(ownerDto).toOwnerDto();
+        return new OwnerDto(ownerService.join(ownerDto));
     }
 
     @PostMapping("/login")
@@ -32,7 +32,7 @@ public class OwnerController {
 
     @GetMapping("/login")
     public OwnerDto getLoginUser() {
-        return loginService.getLoginOwner().toOwnerDto();
+        return new OwnerDto(loginService.getLoginOwner());
     }
 
 
@@ -44,6 +44,6 @@ public class OwnerController {
 
     @PutMapping
     public OwnerDto updateOwner(@LoginOwnerId long ownerId, @RequestBody OwnerDto ownerDto) {
-        return ownerService.updateOwner(ownerId, ownerDto).toOwnerDto();
+        return new OwnerDto(ownerService.updateOwner(ownerId, ownerDto));
     }
 }

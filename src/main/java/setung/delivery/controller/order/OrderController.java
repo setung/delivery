@@ -6,7 +6,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import setung.delivery.argumentresolver.LoginOwnerId;
 import setung.delivery.argumentresolver.LoginUserId;
-import setung.delivery.domain.order.model.Order;
 import setung.delivery.controller.order.dto.OrderDto;
 import setung.delivery.domain.order.model.OrderStatus;
 import setung.delivery.domain.order.RequestOrder;
@@ -26,15 +25,15 @@ public class OrderController {
 
     @GetMapping("/users/{orderId}")
     public OrderDto findOrderById(@LoginUserId long userId, @PathVariable long orderId) {
-        return orderService.findOrderById(userId, orderId).toOrderDto();
+        return new OrderDto(orderService.findOrderById(userId, orderId));
     }
 
     @GetMapping("/users/orders")
     public Page<OrderDto> findAll(@LoginUserId long userId, @RequestParam(required = false) OrderStatus orderStatus, Pageable pageable) {
         if (orderStatus == null) {
-            return orderService.findOrders(userId, pageable).map(Order::toOrderDto);
+            return orderService.findOrders(userId, pageable).map(order -> new OrderDto(order));
         } else {
-            return orderService.findOrders(userId, orderStatus, pageable).map(Order::toOrderDto);
+            return orderService.findOrders(userId, orderStatus, pageable).map(order -> new OrderDto(order));
         }
     }
 
