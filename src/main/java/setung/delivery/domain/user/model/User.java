@@ -31,17 +31,13 @@ public class User extends BaseEntity {
     private String address;
     private String password;
 
-    public UserDto toUserDto() {
-        return UserDto.builder()
-                .id(id)
-                .name(name)
-                .email(email)
-                .tel(tel)
-                .address(address)
-                .password(password)
-                .createdAt(getCreatedAt())
-                .updatedAt(getUpdatedAt())
-                .build();
+    public User(UserDto user) {
+        id = user.getId();
+        name = user.getName();
+        email = user.getEmail();
+        tel = user.getTel();
+        address = user.getAddress();
+        password = user.getPassword();
     }
 
     public User updateUser(UserDto userDto) {

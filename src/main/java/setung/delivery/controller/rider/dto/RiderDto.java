@@ -1,6 +1,5 @@
 package setung.delivery.controller.rider.dto;
 
-
 import lombok.*;
 import setung.delivery.domain.rider.model.Rider;
 
@@ -18,14 +17,12 @@ public class RiderDto {
     private String address;
     private String password;
 
-    public Rider toRider() {
-        return Rider.builder()
-                .id(id)
-                .email(email)
-                .tel(tel)
-                .name(name)
-                .address(address)
-                .password(password)
-                .build();
+    public RiderDto(Rider rider) {
+        id = rider.getId();
+        email = rider.getEmail();
+        tel = rider.getTel();
+        name = rider.getName();
+        address = rider.getAddress();
+        password = rider.getPassword();
     }
 }

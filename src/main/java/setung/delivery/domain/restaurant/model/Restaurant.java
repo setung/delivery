@@ -45,20 +45,16 @@ public class Restaurant extends BaseEntity {
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
     private List<Menu> menus;
 
-    public RestaurantDto toRestaurantDto() {
-        return RestaurantDto.builder()
-                .id(id)
-                .owner(owner)
-                .name(name)
-                .address(address)
-                .tel(tel)
-                .status(status)
-                .openAt(openAt)
-                .closeAt(closeAt)
-                .category(category)
-                .createdAt(getCreatedAt())
-                .updatedAt(getUpdatedAt())
-                .build();
+    public Restaurant(RestaurantDto restaurantDto) {
+        id = restaurantDto.getId();
+        owner = new Owner(restaurantDto.getOwner());
+        name = restaurantDto.getName();
+        address = restaurantDto.getAddress();
+        tel = restaurantDto.getTel();
+        status = restaurantDto.getStatus();
+        openAt = restaurantDto.getOpenAt();
+        closeAt = restaurantDto.getCloseAt();
+        category = restaurantDto.getCategory();
     }
 
     public void update(UpdatedRestaurantDto dto) {

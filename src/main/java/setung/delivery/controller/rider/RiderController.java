@@ -19,8 +19,8 @@ public class RiderController {
     @PostMapping
     public RiderDto join(@RequestBody RiderDto riderDto) {
         riderDto.setPassword(SHA256.encBySha256(riderDto.getPassword()));
-        Rider rider = riderDto.toRider();
-        return riderService.join(rider).toRiderDto();
+        Rider rider = new Rider(riderDto);
+        return new RiderDto(riderService.join(rider));
     }
 
     @PostMapping("/login")
@@ -35,6 +35,6 @@ public class RiderController {
 
     @GetMapping("/login")
     public RiderDto getLoginRider() {
-        return riderLoginService.getLoginRider().toRiderDto();
+        return new RiderDto(riderLoginService.getLoginRider());
     }
 }

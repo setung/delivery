@@ -20,7 +20,7 @@ public class RestaurantController {
 
     @PostMapping
     public RestaurantDto registerRestaurant(@LoginOwnerId long ownerId, @RequestBody RestaurantDto restaurantDto) {
-        return restaurantService.register(ownerId, restaurantDto).toRestaurantDto();
+        return new RestaurantDto(restaurantService.register(ownerId, restaurantDto));
     }
 
     @GetMapping()
@@ -29,9 +29,9 @@ public class RestaurantController {
             Pageable pageable) {
 
         if (category == null) {
-            return restaurantService.findRestaurants(pageable).map(Restaurant::toRestaurantDto);
+            return restaurantService.findRestaurants(pageable).map(res -> new RestaurantDto(res));
         } else {
-            return restaurantService.findRestaurants(category, pageable).map(Restaurant::toRestaurantDto);
+            return restaurantService.findRestaurants(category, pageable).map(res -> new RestaurantDto(res));
         }
     }
 

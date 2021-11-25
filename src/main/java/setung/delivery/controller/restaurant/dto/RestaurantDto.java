@@ -2,7 +2,7 @@ package setung.delivery.controller.restaurant.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import setung.delivery.domain.owner.model.Owner;
+import setung.delivery.controller.owner.dto.OwnerDto;
 import setung.delivery.domain.restaurant.model.Restaurant;
 import setung.delivery.domain.restaurant.model.RestaurantCategory;
 
@@ -19,7 +19,7 @@ public class RestaurantDto {
     private Long id;
 
     @JsonIgnore
-    private Owner owner;
+    private OwnerDto owner;
     private String name;
     private String address;
     private String tel;
@@ -30,16 +30,17 @@ public class RestaurantDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Restaurant toRestaurant() {
-        return Restaurant.builder()
-                .owner(owner)
-                .name(name)
-                .address(address)
-                .tel(tel)
-                .status(status)
-                .openAt(openAt)
-                .closeAt(closeAt)
-                .category(category)
-                .build();
+    public RestaurantDto(Restaurant restaurant) {
+        id = restaurant.getId();
+        owner = new OwnerDto(restaurant.getOwner());
+        address = restaurant.getAddress();
+        tel = restaurant.getTel();
+        status = restaurant.getStatus();
+        openAt = restaurant.getOpenAt();
+        closeAt = restaurant.getCloseAt();
+        category = restaurant.getCategory();
+        createdAt = restaurant.getCreatedAt();
+        updatedAt = getUpdatedAt();
     }
+
 }

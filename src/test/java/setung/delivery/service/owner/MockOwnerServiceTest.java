@@ -45,7 +45,7 @@ class MockOwnerServiceTest {
                 .password("1234")
                 .build();
 
-        Owner owner = ownerDto.toOwner();
+        Owner owner = new Owner(ownerDto);
 
         when(ownerRepository.findById(1L)).thenReturn(Optional.ofNullable(owner));
 

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import setung.delivery.controller.owner.dto.OwnerDto;
 import setung.delivery.domain.owner.model.Owner;
 import setung.delivery.domain.restaurant.model.Restaurant;
 import setung.delivery.domain.restaurant.model.RestaurantCategory;
@@ -29,8 +30,8 @@ public class RestaurantService {
 
     public Restaurant register(long ownerId, RestaurantDto restaurantDto) {
         Owner owner = ownerRepository.findById(ownerId).get();
-        restaurantDto.setOwner(owner);
-        Restaurant savedRestaurant = restaurantRepository.save(restaurantDto.toRestaurant());
+        restaurantDto.setOwner(new OwnerDto(owner));
+        Restaurant savedRestaurant = restaurantRepository.save(new Restaurant(restaurantDto));
         return savedRestaurant;
     }
 

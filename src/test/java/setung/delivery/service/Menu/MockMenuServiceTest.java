@@ -49,7 +49,7 @@ class MockMenuServiceTest {
 
         //when
         when(restaurantRepository.findByIdAndOwnerId(any(Long.class),any(Long.class))).thenReturn(restaurant);
-        when(menuRepository.save(any())).thenReturn(menuDto.toMenu());
+        when(menuRepository.save(any())).thenReturn(new Menu(menuDto));
 
         Menu savedMenu = menuService.registerMenu(any(Long.class), any(Long.class), menuDto);
 
@@ -72,7 +72,7 @@ class MockMenuServiceTest {
 
         //when
         when(restaurantRepository.findByIdAndOwnerId(any(Long.class),any(Long.class))).thenReturn(null);
-        when(menuRepository.save(any())).thenReturn(menuDto.toMenu());
+        when(menuRepository.save(any())).thenReturn(new Menu(menuDto));
 
         //then
         assertThrows(CustomException.class,()->{

@@ -19,7 +19,7 @@ public class UserService {
 
     public User join(UserDto userDto) {
         userDto.setPassword(SHA256.encBySha256(userDto.getPassword()));
-        User user = userRepository.save(userDto.toUser());
+        User user = userRepository.save(new User(userDto));
         return user;
     }
 
