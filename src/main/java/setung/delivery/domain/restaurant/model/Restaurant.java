@@ -1,15 +1,19 @@
 package setung.delivery.domain.restaurant.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import setung.delivery.controller.restaurant.dto.RestaurantDto;
+import setung.delivery.controller.restaurant.dto.UpdatedRestaurantDto;
 import setung.delivery.domain.BaseEntity;
 import setung.delivery.domain.menu.model.Menu;
 import setung.delivery.domain.owner.model.Owner;
-import setung.delivery.controller.restaurant.dto.RestaurantDto;
-import setung.delivery.controller.restaurant.dto.UpdatedRestaurantDto;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -27,7 +31,7 @@ public class Restaurant extends BaseEntity {
     @Column(name = "restaurant_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "owner_id")
     private Owner owner;
 
@@ -35,7 +39,12 @@ public class Restaurant extends BaseEntity {
     private String address;
     private String tel;
     private String status;
+
+    @JsonDeserialize(using = LocalTimeDeserializer.class)
+    @JsonSerialize(using = LocalTimeSerializer.class)
     private LocalTime openAt;
+    @JsonDeserialize(using = LocalTimeDeserializer.class)
+    @JsonSerialize(using = LocalTimeSerializer.class)
     private LocalTime closeAt;
 
     @Enumerated(EnumType.STRING)

@@ -1,5 +1,6 @@
 package setung.delivery.controller.menu.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import setung.delivery.controller.restaurant.dto.RestaurantDto;
 import setung.delivery.domain.menu.model.Menu;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 public class MenuDto {
 
     private Long id;
+    @JsonIgnore
     private RestaurantDto restaurant;
     private String name;
     private int price;
@@ -24,7 +26,7 @@ public class MenuDto {
     private LocalDateTime updatedAt;
 
     public MenuDto(Menu menu) {
-        id=menu.getId();
+        id = menu.getId();
         restaurant = new RestaurantDto(menu.getRestaurant());
         name = menu.getName();
         price = menu.getPrice();

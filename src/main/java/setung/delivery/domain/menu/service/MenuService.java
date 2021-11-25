@@ -1,6 +1,7 @@
 package setung.delivery.domain.menu.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.controller.restaurant.dto.RestaurantDto;
@@ -60,6 +61,7 @@ public class MenuService {
         menuRepository.deleteById(menuId);
     }
 
+    @Cacheable(key = "#restaurantId", value = "findAllByRestaurantId")
     public List<Menu> findAllByRestaurantId(long restaurantId) {
         return menuRepository.findAllByRestaurantId(restaurantId);
     }
