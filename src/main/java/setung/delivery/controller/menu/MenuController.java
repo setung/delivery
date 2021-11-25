@@ -6,6 +6,9 @@ import setung.delivery.argumentresolver.LoginOwnerId;
 import setung.delivery.controller.menu.dto.MenuDto;
 import setung.delivery.domain.menu.service.MenuService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/restaurant/{restaurantId}/menus")
 @AllArgsConstructor
@@ -34,5 +37,11 @@ public class MenuController {
     public void updateMenu(@LoginOwnerId long ownerId, @PathVariable long restaurantId,
                            @PathVariable long menuId, @RequestBody MenuDto menuDto) {
         menuService.updateMenu(ownerId, restaurantId, menuId, menuDto);
+    }
+
+    @GetMapping
+    public List<MenuDto> getMenus(@PathVariable long restaurantId) {
+        return menuService.findAllByRestaurantId(restaurantId).stream().map(menu -> new MenuDto(menu))
+                .collect(Collectors.toList());
     }
 }
