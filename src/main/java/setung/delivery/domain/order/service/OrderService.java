@@ -85,6 +85,10 @@ public class OrderService {
         return order;
     }
 
+    public Page<Order> findOrders(long userId, Pageable pageable) {
+        return orderRepository.findOrderByUserId(userId, pageable);
+    }
+
     public Page<Order> findOrders(Specification<Order> spec, Pageable pageable) {
         return orderRepository.findAll(spec, pageable);
     }

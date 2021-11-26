@@ -16,11 +16,13 @@ import setung.delivery.domain.owner.repository.OwnerRepository;
 import setung.delivery.domain.user.repository.UserRepository;
 import setung.delivery.domain.restaurant.service.RestaurantService;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 public class MenuServiceTest {
 
     @Autowired

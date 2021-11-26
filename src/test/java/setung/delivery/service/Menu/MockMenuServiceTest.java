@@ -40,6 +40,13 @@ class MockMenuServiceTest {
         //given
         Restaurant restaurant = Restaurant.builder().build();
 
+        Menu menu = Menu.builder()
+                .name("된장찌개")
+                .price(1000)
+                .quantity(5)
+                .category(MenuCategory.MAIN)
+                .build();
+
         MenuDto menuDto = MenuDto.builder()
                 .name("된장찌개")
                 .price(1000)
@@ -49,7 +56,7 @@ class MockMenuServiceTest {
 
         //when
         when(restaurantRepository.findByIdAndOwnerId(any(Long.class),any(Long.class))).thenReturn(restaurant);
-        when(menuRepository.save(any())).thenReturn(new Menu(menuDto));
+        when(menuRepository.save(any())).thenReturn(menu);
 
         Menu savedMenu = menuService.registerMenu(any(Long.class), any(Long.class), menuDto);
 
@@ -63,16 +70,22 @@ class MockMenuServiceTest {
     @DisplayName("OwnerId와 RestaurantId가 잘 못 입력시 예외 발생")
     public void registerMenuWithWrongOwnerOrRestaurant() {
         //given
-        MenuDto menuDto = MenuDto.builder()
+        Menu menu = Menu.builder()
                 .name("된장찌개")
                 .price(1000)
                 .quantity(5)
                 .category(MenuCategory.MAIN)
                 .build();
 
+        MenuDto menuDto = MenuDto.builder()
+                .name("된장찌개")
+                .price(1000)
+                .quantity(5)
+                .category(MenuCategory.MAIN)
+                .build();
         //when
         when(restaurantRepository.findByIdAndOwnerId(any(Long.class),any(Long.class))).thenReturn(null);
-        when(menuRepository.save(any())).thenReturn(new Menu(menuDto));
+        when(menuRepository.save(any())).thenReturn(menu);
 
         //then
         assertThrows(CustomException.class,()->{
