@@ -3,6 +3,7 @@ package setung.delivery.domain.order.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.domain.basket.model.BasketMenu;
@@ -84,12 +85,8 @@ public class OrderService {
         return order;
     }
 
-    public Page<Order> findOrders(long userId, Pageable pageable) {
-        return orderRepository.findOrderByUserId(userId, pageable);
-    }
-
-    public Page<Order> findOrders(long userId, OrderStatus orderStatus, Pageable pageable) {
-        return orderRepository.findOrderByUserIdAndOrderStatus(userId, orderStatus, pageable);
+    public Page<Order> findOrders(Specification<Order> spec, Pageable pageable) {
+        return orderRepository.findAll(spec, pageable);
     }
 
     public void approveOrder(long ownerId, long restaurantId, long orderId) {
