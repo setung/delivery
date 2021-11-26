@@ -3,8 +3,10 @@ package setung.delivery.controller.restaurant;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import setung.delivery.argumentresolver.LoginOwnerId;
+import setung.delivery.controller.restaurant.specification.RestaurantSpecification;
 import setung.delivery.domain.restaurant.model.Restaurant;
 import setung.delivery.domain.restaurant.model.RestaurantCategory;
 import setung.delivery.controller.restaurant.dto.RestaurantDto;
@@ -28,11 +30,10 @@ public class RestaurantController {
             @RequestParam(required = false) RestaurantCategory category,
             Pageable pageable) {
 
-        if (category == null) {
-            return restaurantService.findRestaurants(pageable).map(res -> new RestaurantDto(res));
-        } else {
-            return restaurantService.findRestaurants(category, pageable).map(res -> new RestaurantDto(res));
-        }
+        Specification<Restaurant> spec = (root, query, criteriaBuilder) -> null;
+        if (category != null) spec = spec.and(RestaurantSpecification.equalCategory(category));
+
+        return restaurantService.findRestaurants(spec, pageable).map(RestaurantDto::new);
     }
 
     @DeleteMapping("/{restaurantId}")
