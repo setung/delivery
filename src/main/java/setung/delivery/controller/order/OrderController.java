@@ -3,13 +3,21 @@ package setung.delivery.controller.order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import setung.delivery.argumentresolver.LoginOwnerId;
 import setung.delivery.argumentresolver.LoginUserId;
 import setung.delivery.controller.order.dto.OrderDto;
+import setung.delivery.controller.order.specification.OrderSpecification;
+import setung.delivery.domain.order.model.Order;
 import setung.delivery.domain.order.model.OrderStatus;
 import setung.delivery.domain.order.RequestOrder;
 import setung.delivery.domain.order.service.OrderService;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 @RestController
 @RequestMapping
@@ -29,12 +37,14 @@ public class OrderController {
     }
 
     @GetMapping("/users/orders")
-    public Page<OrderDto> findAll(@LoginUserId long userId, @RequestParam(required = false) OrderStatus orderStatus, Pageable pageable) {
-        if (orderStatus == null) {
-            return orderService.findOrders(userId, pageable).map(order -> new OrderDto(order));
-        } else {
-            return orderService.findOrders(userId, orderStatus, pageable).map(order -> new OrderDto(order));
-        }
+    public Page<OrderDto> findAll(@LoginUserId long userId,
+                                  @RequestParam(required = false) OrderStatus orderStatus,
+                                  Pageable pageable) {
+
+        Specification<Order> spec = OrderSpecification.equalUserId(userId);
+        if (orderStatus != null) spec = spec.and(OrderSpecification.equalOrderStatus(orderStatus));
+
+        return orderService.findOrders(spec, pageable).map(OrderDto::new);
     }
 
     @PostMapping("/restaurants/{restaurantId}/orders/{orderId}/approve")

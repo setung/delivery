@@ -3,12 +3,12 @@ package setung.delivery.domain.restaurant.service;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.controller.owner.dto.OwnerDto;
 import setung.delivery.domain.owner.model.Owner;
 import setung.delivery.domain.restaurant.model.Restaurant;
-import setung.delivery.domain.restaurant.model.RestaurantCategory;
 import setung.delivery.controller.restaurant.dto.RestaurantDto;
 import setung.delivery.controller.restaurant.dto.UpdatedRestaurantDto;
 import setung.delivery.exception.CustomException;
@@ -35,12 +35,9 @@ public class RestaurantService {
         return savedRestaurant;
     }
 
-    public Page<Restaurant> findRestaurants(Pageable pageable) {
-        return restaurantRepository.findAll(pageable);
-    }
 
-    public Page<Restaurant> findRestaurants(RestaurantCategory category, Pageable pageable) {
-        return restaurantRepository.findByCategory(category, pageable);
+    public Page<Restaurant> findRestaurants(Specification<Restaurant> spec, Pageable pageable) {
+        return restaurantRepository.findAll(spec, pageable);
     }
 
     public Restaurant findRestaurantById(long restaurantId) {

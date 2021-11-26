@@ -159,7 +159,7 @@ class OrderServiceTest {
 
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_REQUEST);
         orderService.refuseOrder(owner.getId(), restaurant.getId(), order.getId());
-        assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_CANCEL);
+        assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_REFUSED);
     }
 
     @Test
