@@ -30,7 +30,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final OrderMenuRepository orderMenuRepository;
+    private final OrderMenuService orderMenuService;
     private final BasketService basketService;
     private final MenuService menuService;
     private final RestaurantService restaurantService;
@@ -65,7 +65,7 @@ public class OrderService {
                     .menu(menu)
                     .quantity(basketMenu.getQuantity())
                     .build();
-            orderMenuRepository.save(orderMenu);
+            orderMenuService.save(orderMenu);
 
             // 메뉴 수량 업데이트
             menu.updateQuantity(menu.getQuantity() - basketMenu.getQuantity());
@@ -96,7 +96,7 @@ public class OrderService {
         restaurantService.findRestaurantByIdAndOwnerId(ownerId, restaurantId);
         Order order = findByIdAndRestaurantId(orderId, restaurantId);
 
-        if (order.getOrderStatus() != OrderStatus.ORDER_REQUEST && order.getOrderStatus() != OrderStatus.ORDER_CANCEL)
+        if (order.getOrderStatus() != OrderStatus.ORDER_REQUEST && order.getOrderStatus() != OrderStatus.ORDER_REFUSED)
             throw new CustomException(ErrorCode.BAD_REQUEST_ORDER);
 
         order.updateOrderStatus(OrderStatus.ORDER_APPROVAL);
@@ -105,11 +105,17 @@ public class OrderService {
     public void refuseOrder(long ownerId, long restaurantId, long orderId) {
         restaurantService.findRestaurantByIdAndOwnerId(ownerId, restaurantId);
         Order order = findByIdAndRestaurantId(orderId, restaurantId);
+        List<OrderMenu> orderMenus = orderMenuService.findByOrderId(orderId);
 
         if (order.getOrderStatus() != OrderStatus.ORDER_REQUEST && order.getOrderStatus() != OrderStatus.ORDER_APPROVAL)
             throw new CustomException(ErrorCode.BAD_REQUEST_ORDER);
 
-        order.updateOrderStatus(OrderStatus.ORDER_CANCEL);
+        order.updateOrderStatus(OrderStatus.ORDER_REFUSED);
+
+        for (OrderMenu orderMenu : orderMenus) {
+            Menu menu = menuService.findByIdAndRestaurantId(orderMenu.getMenu().getId(), restaurantId);
+            menu.updateQuantity(menu.getQuantity() + orderMenu.getQuantity());
+        }
     }
 
     public Order findByIdAndRestaurantId(long orderId, long restaurantId) {
@@ -123,6 +129,7 @@ public class OrderService {
 
     public void cancelOrder(long userId, long orderId) {
         Order order = orderRepository.findByOrderIdAndUserId(orderId, userId);
+        List<OrderMenu> orderMenus = orderMenuService.findByOrderId(orderId);
 
         if (order == null)
             throw new CustomException(ErrorCode.NOT_FOUND_ORDER);
@@ -130,5 +137,10 @@ public class OrderService {
             throw new CustomException(ErrorCode.BAD_REQUEST_ORDER);
 
         order.updateOrderStatus(OrderStatus.ORDER_CANCEL);
+
+        for (OrderMenu orderMenu : orderMenus) {
+            Menu menu = menuService.findByIdAndRestaurantId(orderMenu.getMenu().getId(), order.getRestaurant().getId());
+            menu.updateQuantity(menu.getQuantity() + orderMenu.getQuantity());
+        }
     }
 }
