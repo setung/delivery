@@ -1,0 +1,9 @@
+package setung.delivery.domain.menu.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import setung.delivery.domain.menu.model.MenuImage;
+
+@Repository
+public interface MenuImageRepository extends JpaRepository<MenuImage, String> {
+}

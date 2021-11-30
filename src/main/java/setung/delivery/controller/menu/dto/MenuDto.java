@@ -5,8 +5,10 @@ import lombok.*;
 import setung.delivery.controller.restaurant.dto.RestaurantDto;
 import setung.delivery.domain.menu.model.Menu;
 import setung.delivery.domain.menu.model.MenuCategory;
+import setung.delivery.domain.menu.model.MenuImage;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,6 +26,7 @@ public class MenuDto {
     private MenuCategory category;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<MenuImage> images;
 
     public MenuDto(Menu menu) {
         id = menu.getId();
@@ -34,6 +37,7 @@ public class MenuDto {
         category = menu.getCategory();
         createdAt = menu.getCreatedAt();
         updatedAt = menu.getUpdatedAt();
+        images = menu.getImages();
     }
 
 }

@@ -36,3 +36,4 @@ out/
 ### VS Code ###
 .vscode/
 src/main/resources/application-release.properties
+src/main/resources/firebase_key.json

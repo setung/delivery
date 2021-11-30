@@ -9,6 +9,8 @@ import setung.delivery.controller.menu.dto.MenuDto;
 import setung.delivery.domain.restaurant.model.Restaurant;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +34,9 @@ public class Menu extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private MenuCategory category;
+
+    @OneToMany(mappedBy = "menu")
+    List<MenuImage> images = new ArrayList<>();
 
     public Menu(MenuDto menuDto) {
         id = menuDto.getId();
