@@ -33,6 +33,7 @@ public class RestaurantDto {
     public RestaurantDto(Restaurant restaurant) {
         id = restaurant.getId();
         owner = new OwnerDto(restaurant.getOwner());
+        name = restaurant.getName();
         address = restaurant.getAddress();
         tel = restaurant.getTel();
         status = restaurant.getStatus();
