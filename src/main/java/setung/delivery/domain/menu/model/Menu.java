@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import setung.delivery.domain.BaseEntity;
 import setung.delivery.controller.menu.dto.MenuDto;
+import setung.delivery.domain.BaseEntity;
 import setung.delivery.domain.restaurant.model.Restaurant;
 
 import javax.persistence.*;

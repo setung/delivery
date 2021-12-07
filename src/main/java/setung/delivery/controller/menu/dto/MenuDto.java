@@ -7,6 +7,8 @@ import setung.delivery.domain.menu.model.Menu;
 import setung.delivery.domain.menu.model.MenuCategory;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -24,6 +26,7 @@ public class MenuDto {
     private MenuCategory category;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<MenuImageDto> images;
 
     public MenuDto(Menu menu) {
         id = menu.getId();
