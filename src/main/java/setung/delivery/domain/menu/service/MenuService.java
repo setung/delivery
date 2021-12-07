@@ -107,7 +107,8 @@ public class MenuService {
 
     public List<MenuImage> findMenuImagesByMenu(long restaurantId, long menuId) {
         Menu menu = findByIdAndRestaurantId(menuId, restaurantId);
-        return menu.getImages();
+        List<MenuImage> menuImages = menuImageRepository.findByMenuId(menu.getId());
+        return menuImages;
     }
 
     public Menu findMenuById(long menuId) {

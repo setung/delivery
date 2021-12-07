@@ -4,13 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import setung.delivery.domain.BaseEntity;
 import setung.delivery.controller.menu.dto.MenuDto;
+import setung.delivery.domain.BaseEntity;
 import setung.delivery.domain.restaurant.model.Restaurant;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -34,9 +32,6 @@ public class Menu extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private MenuCategory category;
-
-    @OneToMany(mappedBy = "menu")
-    List<MenuImage> images = new ArrayList<>();
 
     public Menu(MenuDto menuDto) {
         id = menuDto.getId();

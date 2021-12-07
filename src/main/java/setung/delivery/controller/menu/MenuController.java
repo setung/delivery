@@ -6,6 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import setung.delivery.argumentresolver.LoginOwnerId;
 import setung.delivery.controller.menu.dto.MenuDto;
 import setung.delivery.controller.menu.dto.MenuImageDto;
+import setung.delivery.domain.menu.model.MenuImage;
 import setung.delivery.domain.menu.service.MenuService;
 
 import java.util.List;
@@ -43,7 +44,12 @@ public class MenuController {
 
     @GetMapping
     public List<MenuDto> getMenus(@PathVariable long restaurantId) {
-        return menuService.findAllByRestaurantId(restaurantId).stream().map(menu -> new MenuDto(menu))
+        return menuService.findAllByRestaurantId(restaurantId).stream().map(menu -> {
+                    List<MenuImage> menuImages = menuService.findMenuImagesByMenu(restaurantId, menu.getId());
+                    MenuDto menuDto = new MenuDto(menu);
+                    menuDto.setImages(menuImages.stream().map(images -> new MenuImageDto(images)).collect(Collectors.toList()));
+                    return menuDto;
+                })
                 .collect(Collectors.toList());
     }
 
