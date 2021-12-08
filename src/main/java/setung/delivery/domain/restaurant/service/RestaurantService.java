@@ -16,6 +16,8 @@ import setung.delivery.exception.ErrorCode;
 import setung.delivery.domain.menu.repository.MenuRepository;
 import setung.delivery.domain.owner.repository.OwnerRepository;
 import setung.delivery.domain.restaurant.repository.RestaurantRepository;
+import setung.delivery.utils.geo.GeocodingUtil;
+import setung.delivery.utils.geo.LatLonData;
 
 import java.util.Optional;
 
@@ -27,14 +29,16 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final OwnerRepository ownerRepository;
     private final MenuRepository menuRepository;
+    private final GeocodingUtil geocodingUtil;
 
     public Restaurant register(long ownerId, RestaurantDto restaurantDto) {
         Owner owner = ownerRepository.findById(ownerId).get();
         restaurantDto.setOwner(new OwnerDto(owner));
-        Restaurant savedRestaurant = restaurantRepository.save(new Restaurant(restaurantDto));
-        return savedRestaurant;
-    }
 
+        Restaurant restaurant = new Restaurant(restaurantDto);
+        setRestaurantLatLon(restaurant, restaurantDto.getAddress());
+        return restaurantRepository.save(restaurant);
+    }
 
     public Page<Restaurant> findRestaurants(Specification<Restaurant> spec, Pageable pageable) {
         return restaurantRepository.findAll(spec, pageable);
@@ -68,7 +72,14 @@ public class RestaurantService {
         return restaurant;
     }
 
-    public void updateRestaurant(Restaurant restaurant, UpdatedRestaurantDto updatedRestaurantDto) {
+    public void updateRestaurant(long ownerId, long restaurantId, UpdatedRestaurantDto updatedRestaurantDto) {
+        Restaurant restaurant = restaurantRepository.findByIdAndOwnerId(restaurantId, ownerId);
         restaurant.update(updatedRestaurantDto);
+        setRestaurantLatLon(restaurant, updatedRestaurantDto.getAddress());
+    }
+
+    private void setRestaurantLatLon(Restaurant restaurant, String address) {
+        LatLonData latLon = geocodingUtil.getLatLon(address);
+        restaurant.setLatLon(latLon);
     }
 }
