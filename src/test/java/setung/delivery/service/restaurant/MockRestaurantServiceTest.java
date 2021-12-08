@@ -18,6 +18,8 @@ import setung.delivery.domain.restaurant.service.RestaurantService;
 import setung.delivery.exception.CustomException;
 import setung.delivery.domain.owner.repository.OwnerRepository;
 import setung.delivery.domain.restaurant.repository.RestaurantRepository;
+import setung.delivery.utils.geo.GeocodingUtil;
+import setung.delivery.utils.geo.LatLonData;
 
 import java.time.LocalTime;
 
@@ -32,6 +34,8 @@ class MockRestaurantServiceTest {
     RestaurantRepository restaurantRepository;
     @Mock
     OwnerRepository ownerRepository;
+    @Mock
+    GeocodingUtil geocodingUtil;
 
     @InjectMocks
     RestaurantService restaurantService;
@@ -62,7 +66,7 @@ class MockRestaurantServiceTest {
 
         when(ownerRepository.findById(any())).thenReturn(java.util.Optional.ofNullable(owner));
         when(restaurantRepository.save(any())).thenReturn(restaurant);
-
+        when(geocodingUtil.getLatLon(any())).thenReturn(new LatLonData(0, 0));
         //when
         Restaurant registerRestaurant = restaurantService.register(owner.getId(), restaurantDto);
 

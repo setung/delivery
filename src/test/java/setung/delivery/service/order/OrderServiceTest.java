@@ -60,7 +60,8 @@ class OrderServiceTest {
     void beforeEach() {
         user = User.builder().build();
         owner = Owner.builder().build();
-        RestaurantDto restaurantDto = RestaurantDto.builder().build();
+        RestaurantDto restaurantDto = RestaurantDto.builder()
+                .address("서울 강남구 강남대로94길 27").build();
         MenuDto menuDto1 = MenuDto.builder().price(10000).quantity(10).name("menu1").build();
         MenuDto menuDto2 = MenuDto.builder().price(1000).quantity(5).name("menu2").build();
 
