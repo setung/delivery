@@ -19,8 +19,7 @@ public class RiderController {
     @PostMapping
     public RiderDto join(@RequestBody RiderDto riderDto) {
         riderDto.setPassword(SHA256.encBySha256(riderDto.getPassword()));
-        Rider rider = new Rider(riderDto);
-        return new RiderDto(riderService.join(rider));
+        return new RiderDto(riderService.join(riderDto));
     }
 
     @PostMapping("/login")
