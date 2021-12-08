@@ -23,12 +23,14 @@ class UserServiceTest {
                 .name("jsh")
                 .email("test@test.com")
                 .tel("000-0000-0000")
+                .address("서울특별시 송파구 올림픽로 300")
                 .password("1234")
                 .build();
 
         UserDto updatedUserDto = UserDto.builder()
                 .name("aaaa")
                 .password("1234")
+                .address("서울 강남구 영동대로 513")
                 .build();
 
         //when
@@ -38,6 +40,9 @@ class UserServiceTest {
         //then
         User findUser = userService.findUserByEmailAndPassword(userdto.getEmail(), userdto.getPassword());
         Assertions.assertThat(findUser.getName()).isEqualTo("aaaa");
+        Assertions.assertThat(findUser.getLat()).isNotNull();
+        Assertions.assertThat(findUser.getLon()).isNotNull();
+
     }
 
     @Test
@@ -47,6 +52,7 @@ class UserServiceTest {
                 .name("jsh")
                 .email("test@test.com")
                 .tel("000-0000-0000")
+                .address("서울 강남구 영동대로 513")
                 .password("1234")
                 .build();
 

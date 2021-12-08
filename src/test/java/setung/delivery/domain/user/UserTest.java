@@ -43,6 +43,7 @@ class UserTest {
         userA.updateUser(UserDto.builder().password("1234").build());
         em.flush();
         em.clear();
+        
         Assertions.assertThat(userA.getCreatedAt()).isNotEqualTo(userA.getUpdatedAt());
     }
 }
