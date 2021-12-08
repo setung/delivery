@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import setung.delivery.domain.BaseEntity;
 import setung.delivery.controller.user.dto.UserDto;
+import setung.delivery.utils.geo.LatLonData;
 
 import javax.persistence.*;
 
@@ -31,6 +32,9 @@ public class User extends BaseEntity {
     private String address;
     private String password;
 
+    private Double lon;
+    private Double lat;
+
     public User(UserDto user) {
         id = user.getId();
         name = user.getName();
@@ -44,6 +48,12 @@ public class User extends BaseEntity {
         this.name = userDto.getName();
         this.address = userDto.getAddress();
         this.password = userDto.getPassword();
+        return this;
+    }
+
+    public User setLatLon(LatLonData latLon) {
+        this.lon = latLon.getLon();
+        this.lat = latLon.getLat();
         return this;
     }
 }

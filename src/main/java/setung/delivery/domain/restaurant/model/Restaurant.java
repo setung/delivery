@@ -14,6 +14,7 @@ import setung.delivery.controller.restaurant.dto.UpdatedRestaurantDto;
 import setung.delivery.domain.BaseEntity;
 import setung.delivery.domain.menu.model.Menu;
 import setung.delivery.domain.owner.model.Owner;
+import setung.delivery.utils.geo.LatLonData;
 
 import javax.persistence.*;
 import java.time.LocalTime;
@@ -39,6 +40,8 @@ public class Restaurant extends BaseEntity {
     private String address;
     private String tel;
     private String status;
+    private Double lon;
+    private Double lat;
 
     @JsonDeserialize(using = LocalTimeDeserializer.class)
     @JsonSerialize(using = LocalTimeSerializer.class)
@@ -74,5 +77,11 @@ public class Restaurant extends BaseEntity {
         openAt = dto.getOpenAt();
         closeAt = dto.getCloseAt();
         category = dto.getCategory();
+    }
+
+    public Restaurant setLatLon(LatLonData latLon) {
+        this.lon = latLon.getLon();
+        this.lat = latLon.getLat();
+        return this;
     }
 }

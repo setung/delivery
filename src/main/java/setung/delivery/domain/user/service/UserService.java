@@ -8,6 +8,8 @@ import setung.delivery.exception.CustomException;
 import setung.delivery.exception.ErrorCode;
 import setung.delivery.domain.user.repository.UserRepository;
 import setung.delivery.utils.SHA256;
+import setung.delivery.utils.geo.GeocodingUtil;
+import setung.delivery.utils.geo.LatLonData;
 
 import java.util.Optional;
 
@@ -16,10 +18,15 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final GeocodingUtil geocodingUtil;
 
     public User join(UserDto userDto) {
         userDto.setPassword(SHA256.encBySha256(userDto.getPassword()));
-        User user = userRepository.save(new User(userDto));
+        LatLonData latLon = geocodingUtil.getLatLon(userDto.getAddress());
+
+        User user = new User(userDto);
+        user.setLatLon(latLon);
+        userRepository.save(user);
         return user;
     }
 
@@ -29,9 +36,11 @@ public class UserService {
 
     public User updateUser(long userId, UserDto userDto) {
         userDto.setPassword(SHA256.encBySha256(userDto.getPassword()));
+        LatLonData latLon = geocodingUtil.getLatLon(userDto.getAddress());
 
         User user = userRepository.findById(userId).get();
         user.updateUser(userDto);
+        user.setLatLon(latLon);
         userRepository.save(user);
         return user;
     }

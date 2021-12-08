@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import setung.delivery.domain.BaseEntity;
 import setung.delivery.domain.order.model.Order;
 import setung.delivery.controller.rider.dto.RiderDto;
+import setung.delivery.utils.geo.LatLonData;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class Rider extends BaseEntity {
     private String name;
     private String address;
     private String password;
+    private Double lon;
+    private Double lat;
 
     @JsonIgnore
     @OneToMany(mappedBy = "rider", fetch = FetchType.LAZY)
@@ -45,5 +48,11 @@ public class Rider extends BaseEntity {
         name = riderDto.getName();
         address = riderDto.getAddress();
         password = riderDto.getPassword();
+    }
+
+    public Rider setLatLon(LatLonData latLon) {
+        this.lon = latLon.getLon();
+        this.lat = latLon.getLat();
+        return this;
     }
 }

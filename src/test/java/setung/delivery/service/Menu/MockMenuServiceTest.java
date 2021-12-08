@@ -12,10 +12,13 @@ import setung.delivery.domain.menu.model.Menu;
 import setung.delivery.domain.menu.model.MenuCategory;
 import setung.delivery.controller.menu.dto.MenuDto;
 import setung.delivery.domain.menu.service.MenuService;
+import setung.delivery.domain.owner.model.Owner;
 import setung.delivery.domain.restaurant.model.Restaurant;
 import setung.delivery.exception.CustomException;
 import setung.delivery.domain.menu.repository.MenuRepository;
 import setung.delivery.domain.restaurant.repository.RestaurantRepository;
+import setung.delivery.utils.geo.GeocodingUtil;
+import setung.delivery.utils.geo.LatLonData;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,6 +34,9 @@ class MockMenuServiceTest {
     @Mock
     RestaurantRepository restaurantRepository;
 
+    @Mock
+    GeocodingUtil geocodingUtil;
+
     @InjectMocks
     MenuService menuService;
 
@@ -38,7 +44,10 @@ class MockMenuServiceTest {
     @DisplayName("정상적인 메뉴 등록")
     public void registerMenu() {
         //given
-        Restaurant restaurant = Restaurant.builder().build();
+        Owner owner = Owner.builder().build();
+
+        Restaurant restaurant = Restaurant.builder()
+                .owner(owner).build();
 
         Menu menu = Menu.builder()
                 .name("된장찌개")
@@ -55,14 +64,15 @@ class MockMenuServiceTest {
                 .build();
 
         //when
-        when(restaurantRepository.findByIdAndOwnerId(any(Long.class),any(Long.class))).thenReturn(restaurant);
+        when(restaurantRepository.findByIdAndOwnerId(any(Long.class), any(Long.class))).thenReturn(restaurant);
         when(menuRepository.save(any())).thenReturn(menu);
+        when(geocodingUtil.getLatLon(any())).thenReturn(new LatLonData(0, 0));
 
         Menu savedMenu = menuService.registerMenu(any(Long.class), any(Long.class), menuDto);
 
         //then
         assertThat(savedMenu.getName()).isEqualTo(menuDto.getName());
-        verify(restaurantRepository, times(1)).findByIdAndOwnerId(any(Long.class),any(Long.class));
+        verify(restaurantRepository, times(1)).findByIdAndOwnerId(any(Long.class), any(Long.class));
         verify(menuRepository, times(1)).save(any());
     }
 
@@ -84,11 +94,11 @@ class MockMenuServiceTest {
                 .category(MenuCategory.MAIN)
                 .build();
         //when
-        when(restaurantRepository.findByIdAndOwnerId(any(Long.class),any(Long.class))).thenReturn(null);
+        when(restaurantRepository.findByIdAndOwnerId(any(Long.class), any(Long.class))).thenReturn(null);
         when(menuRepository.save(any())).thenReturn(menu);
 
         //then
-        assertThrows(CustomException.class,()->{
+        assertThrows(CustomException.class, () -> {
             menuService.registerMenu(any(Long.class), any(Long.class), menuDto);
         });
     }

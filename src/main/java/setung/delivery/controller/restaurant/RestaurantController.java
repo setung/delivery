@@ -44,6 +44,6 @@ public class RestaurantController {
     @PutMapping("/{restaurantId}")
     public void updateRestaurant(@LoginOwnerId long ownerId, @PathVariable long restaurantId, @RequestBody UpdatedRestaurantDto updatedRestaurantDto) {
         Restaurant restaurant = restaurantService.findRestaurantByIdAndOwnerId(ownerId, restaurantId);
-        restaurantService.updateRestaurant(restaurant, updatedRestaurantDto);
+        restaurantService.updateRestaurant(ownerId, restaurantId, updatedRestaurantDto);
     }
 }
