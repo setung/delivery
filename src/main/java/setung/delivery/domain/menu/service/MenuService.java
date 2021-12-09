@@ -1,6 +1,7 @@
 package setung.delivery.domain.menu.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,16 +59,21 @@ public class MenuService {
         menuRepository.deleteByRestaurantId(restaurantId);
     }
 
+    @CacheEvict(key = "#restaurantId", value = "findMenusByRestaurantId")
     public void deleteMenu(long ownerId, long restaurantId, long menuId) {
         Restaurant restaurant = restaurantRepository.findByIdAndOwnerId(restaurantId, ownerId);
 
         if (restaurant == null)
             throw new CustomException(ErrorCode.NOT_FOUND_RESTAURANT);
 
+        for (MenuImage menuImage : findMenuImagesByMenu(restaurantId, menuId)) {
+            deleteMenuImage(menuImage.getId());
+        }
+
         menuRepository.deleteById(menuId);
     }
 
-    @Cacheable(key = "#restaurantId", value = "findAllByRestaurantId")
+    @Cacheable(key = "#restaurantId", value = "findMenusByRestaurantId")
     public List<Menu> findAllByRestaurantId(long restaurantId) {
         return menuRepository.findAllByRestaurantId(restaurantId);
     }
@@ -119,6 +125,10 @@ public class MenuService {
         Restaurant restaurant = restaurantRepository.findByIdAndOwnerId(restaurantId, ownerId);
         Menu menu = menuRepository.findByIdAndRestaurantId(menuId, restaurantId);
 
+        deleteMenuImage(menuImageId);
+    }
+
+    private void deleteMenuImage(String menuImageId) {
         firebaseStorageUtil.delete(menuImageId);
         menuImageRepository.deleteById(menuImageId);
     }
