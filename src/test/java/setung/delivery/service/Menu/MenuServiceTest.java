@@ -59,7 +59,7 @@ public class MenuServiceTest {
         menu3 = menuService.registerMenu(owner.getId(), restaurant.getId(), menuDto3);
     }
 
-    @Test
+   /* @Test
     public void deleteMenu() {
         List<Menu> beforeMenus = menuService.findAllByRestaurantId(restaurant.getId());
 
@@ -81,7 +81,7 @@ public class MenuServiceTest {
         assertThat(menus.size()).isEqualTo(2);
         assertThat(menus.get(0).getName()).isEqualTo("menu2");
         assertThat(menus.get(1).getName()).isEqualTo("menu3");
-    }
+    }*/
 
     @Test
     public void updatedMenu() {
