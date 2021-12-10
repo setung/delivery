@@ -19,5 +19,5 @@ public class UpdatedRestaurantDto {
     private LocalTime openAt;
     private LocalTime closeAt;
     private RestaurantCategory category;
-
+    private Double deliveryRange;
 }

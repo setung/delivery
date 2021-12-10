@@ -42,6 +42,7 @@ public class Restaurant extends BaseEntity {
     private String status;
     private Double lon;
     private Double lat;
+    private Double deliveryRange;
 
     @JsonDeserialize(using = LocalTimeDeserializer.class)
     @JsonSerialize(using = LocalTimeSerializer.class)
@@ -67,6 +68,7 @@ public class Restaurant extends BaseEntity {
         openAt = restaurantDto.getOpenAt();
         closeAt = restaurantDto.getCloseAt();
         category = restaurantDto.getCategory();
+        deliveryRange = restaurantDto.getDeliveryRange();
     }
 
     public void update(UpdatedRestaurantDto dto) {
@@ -77,6 +79,7 @@ public class Restaurant extends BaseEntity {
         openAt = dto.getOpenAt();
         closeAt = dto.getCloseAt();
         category = dto.getCategory();
+        deliveryRange = dto.getDeliveryRange();
     }
 
     public Restaurant setLatLon(LatLonData latLon) {
