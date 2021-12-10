@@ -29,6 +29,7 @@ public class RestaurantDto {
     private RestaurantCategory category;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Double deliveryRange;
 
     public RestaurantDto(Restaurant restaurant) {
         id = restaurant.getId();
@@ -42,6 +43,7 @@ public class RestaurantDto {
         category = restaurant.getCategory();
         createdAt = restaurant.getCreatedAt();
         updatedAt = getUpdatedAt();
+        deliveryRange = restaurant.getDeliveryRange();
     }
 
 }
