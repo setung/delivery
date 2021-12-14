@@ -6,7 +6,6 @@ import setung.delivery.controller.restaurant.dto.RestaurantDto;
 import setung.delivery.controller.user.dto.UserDto;
 import setung.delivery.domain.order.model.Order;
 import setung.delivery.domain.order.model.OrderStatus;
-import setung.delivery.domain.owner.model.Owner;
 
 import java.time.LocalDateTime;
 

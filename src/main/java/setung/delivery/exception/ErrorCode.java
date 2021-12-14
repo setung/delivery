@@ -25,6 +25,7 @@ public enum ErrorCode {
     BAD_REQUEST_ORDER(HttpStatus.UNAUTHORIZED, "잘못된 ORDER 요청을 하였습니다."),
 
     BAD_REQUEST_STORAGE(HttpStatus.BAD_REQUEST, "잘못된 STORAGE 요청을 하였습니다."),
+    BAD_REQUEST_FIRESTORE(HttpStatus.BAD_REQUEST, "잘못된 FIRESTORE 요청을 하였습니다."),
 
     BAD_REQUEST_ADDRESS(HttpStatus.BAD_REQUEST, "잘못된 ADDRESS 요청을 하였습니다.");
 
