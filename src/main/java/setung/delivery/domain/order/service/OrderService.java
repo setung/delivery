@@ -6,10 +6,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import setung.delivery.controller.order.dto.OrderDto;
 import setung.delivery.domain.basket.model.BasketMenu;
 import setung.delivery.domain.menu.model.Menu;
 import setung.delivery.domain.order.*;
+import setung.delivery.domain.order.aop.SaveOrderToFirestore;
 import setung.delivery.domain.order.model.Order;
 import setung.delivery.domain.order.model.OrderMenu;
 import setung.delivery.domain.order.model.OrderStatus;
@@ -22,7 +22,6 @@ import setung.delivery.domain.menu.service.MenuService;
 import setung.delivery.domain.basket.service.BasketService;
 import setung.delivery.domain.restaurant.service.RestaurantService;
 import setung.delivery.domain.user.service.UserService;
-import setung.delivery.utils.firebase.FirestoreUtil;
 
 import java.util.List;
 
@@ -37,9 +36,9 @@ public class OrderService {
     private final MenuService menuService;
     private final RestaurantService restaurantService;
     private final UserService userService;
-    private final FirestoreUtil firestoreUtil;
 
-    public void order(long userId, RequestOrder requestOrder) {
+    @SaveOrderToFirestore
+    public Order order(long userId, RequestOrder requestOrder) {
         long restaurantId = requestOrder.getRestaurantId();
         List<BasketMenu> basketMenus = basketService.findBasketMenus(userId, restaurantId);
         Restaurant restaurant = restaurantService.findRestaurantById(restaurantId);
@@ -75,9 +74,10 @@ public class OrderService {
             menu.updateQuantity(menu.getQuantity() - basketMenu.getQuantity());
         }
 
-        saveOrderToFirestore(order);
         basketService.clearBasket(userId, restaurantId); // 주문 완료후 장바구니 삭제
         order.updateTotalPrice(totalPrice);
+
+        return order;
     }
 
     public Order findOrderById(long userId, long orderId) {
@@ -132,7 +132,8 @@ public class OrderService {
         return order;
     }
 
-    public void cancelOrder(long userId, long orderId) {
+    @SaveOrderToFirestore
+    public Order cancelOrder(long userId, long orderId) {
         Order order = orderRepository.findByOrderIdAndUserId(orderId, userId);
         List<OrderMenu> orderMenus = orderMenuService.findByOrderId(orderId);
 
@@ -148,26 +149,7 @@ public class OrderService {
             menu.updateQuantity(menu.getQuantity() + orderMenu.getQuantity());
         }
 
-        saveOrderToFirestore(order);
-    }
-
-    private void saveOrderToFirestore(Order order) {
-        OrderDto orderDto = OrderDto.builder()
-                .id(order.getId())
-                .status(order.getOrderStatus())
-                .address(order.getAddress())
-                .build();
-
-        firestoreUtil.insertData(getOrderCollectionName(order.getRestaurant().getId()),
-                getOrderDocumentName(order.getId()), orderDto);
-    }
-
-    private String getOrderCollectionName(long restaurantId) {
-        return "restaurant_" + restaurantId;
-    }
-
-    private String getOrderDocumentName(long orderId) {
-        return "order_" + orderId;
+        return order;
     }
 
 }
