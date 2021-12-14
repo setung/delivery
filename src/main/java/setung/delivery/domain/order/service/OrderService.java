@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.domain.basket.model.BasketMenu;
 import setung.delivery.domain.menu.model.Menu;
 import setung.delivery.domain.order.*;
-import setung.delivery.domain.order.aop.SaveOrderToFirestore;
+import setung.delivery.domain.order.aop.SaveOrderToFirestoreForRestaurant;
+import setung.delivery.domain.order.aop.SaveOrderToFirestoreForUser;
 import setung.delivery.domain.order.model.Order;
 import setung.delivery.domain.order.model.OrderMenu;
 import setung.delivery.domain.order.model.OrderStatus;
@@ -37,7 +38,7 @@ public class OrderService {
     private final RestaurantService restaurantService;
     private final UserService userService;
 
-    @SaveOrderToFirestore
+    @SaveOrderToFirestoreForRestaurant
     public Order order(long userId, RequestOrder requestOrder) {
         long restaurantId = requestOrder.getRestaurantId();
         List<BasketMenu> basketMenus = basketService.findBasketMenus(userId, restaurantId);
@@ -97,7 +98,9 @@ public class OrderService {
         return orderRepository.findAll(spec, pageable);
     }
 
-    public void approveOrder(long ownerId, long restaurantId, long orderId) {
+    @SaveOrderToFirestoreForRestaurant
+    @SaveOrderToFirestoreForUser
+    public Order approveOrder(long ownerId, long restaurantId, long orderId) {
         restaurantService.findRestaurantByIdAndOwnerId(ownerId, restaurantId);
         Order order = findByIdAndRestaurantId(orderId, restaurantId);
 
@@ -105,9 +108,13 @@ public class OrderService {
             throw new CustomException(ErrorCode.BAD_REQUEST_ORDER);
 
         order.updateOrderStatus(OrderStatus.ORDER_APPROVAL);
+
+        return order;
     }
 
-    public void refuseOrder(long ownerId, long restaurantId, long orderId) {
+    @SaveOrderToFirestoreForRestaurant
+    @SaveOrderToFirestoreForUser
+    public Order refuseOrder(long ownerId, long restaurantId, long orderId) {
         restaurantService.findRestaurantByIdAndOwnerId(ownerId, restaurantId);
         Order order = findByIdAndRestaurantId(orderId, restaurantId);
         List<OrderMenu> orderMenus = orderMenuService.findByOrderId(orderId);
@@ -121,6 +128,8 @@ public class OrderService {
             Menu menu = menuService.findByIdAndRestaurantId(orderMenu.getMenu().getId(), restaurantId);
             menu.updateQuantity(menu.getQuantity() + orderMenu.getQuantity());
         }
+
+        return order;
     }
 
     public Order findByIdAndRestaurantId(long orderId, long restaurantId) {
@@ -132,7 +141,7 @@ public class OrderService {
         return order;
     }
 
-    @SaveOrderToFirestore
+    @SaveOrderToFirestoreForRestaurant
     public Order cancelOrder(long userId, long orderId) {
         Order order = orderRepository.findByOrderIdAndUserId(orderId, userId);
         List<OrderMenu> orderMenus = orderMenuService.findByOrderId(orderId);

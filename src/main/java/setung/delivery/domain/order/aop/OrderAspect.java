@@ -16,26 +16,31 @@ public class OrderAspect {
 
     private final FirestoreUtil firestoreUtil;
 
-    @Around("@annotation(setung.delivery.domain.order.aop.SaveOrderToFirestore)")
-    public Object saveOrderToFirestore(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("@annotation(setung.delivery.domain.order.aop.SaveOrderToFirestoreForRestaurant)")
+    public Object saveOrderToFirestoreForRestaurant(ProceedingJoinPoint joinPoint) throws Throwable {
         Order order = (Order) joinPoint.proceed();
-        saveOrderToFirestore(order);
+        String collectionName = "restaurant_" + order.getRestaurant().getId();
+        saveOrderToFirestore(collectionName, order);
         return order;
     }
 
-    private void saveOrderToFirestore(Order order) {
+    @Around("@annotation(setung.delivery.domain.order.aop.SaveOrderToFirestoreForUser)")
+    public Object saveOrderToFirestoreForUser(ProceedingJoinPoint joinPoint) throws Throwable {
+        Order order = (Order) joinPoint.proceed();
+        String collectionName = "user_" + order.getUser().getId();
+        saveOrderToFirestore(collectionName, order);
+        return order;
+    }
+
+    private void saveOrderToFirestore(String collectionName, Order order) {
         OrderDto orderDto = OrderDto.builder()
                 .id(order.getId())
                 .status(order.getOrderStatus())
                 .address(order.getAddress())
                 .build();
 
-        firestoreUtil.insertData(getOrderCollectionName(order.getRestaurant().getId()),
+        firestoreUtil.insertData(collectionName,
                 getOrderDocumentName(order.getId()), orderDto);
-    }
-
-    private String getOrderCollectionName(long restaurantId) {
-        return "restaurant_" + restaurantId;
     }
 
     private String getOrderDocumentName(long orderId) {
