@@ -75,7 +75,7 @@ public class OrderService {
             menu.updateQuantity(menu.getQuantity() - basketMenu.getQuantity());
         }
 
-        saveOrderToFirestore(restaurantId, order);
+        saveOrderToFirestore(order);
         basketService.clearBasket(userId, restaurantId); // 주문 완료후 장바구니 삭제
         order.updateTotalPrice(totalPrice);
     }
@@ -147,16 +147,18 @@ public class OrderService {
             Menu menu = menuService.findByIdAndRestaurantId(orderMenu.getMenu().getId(), order.getRestaurant().getId());
             menu.updateQuantity(menu.getQuantity() + orderMenu.getQuantity());
         }
+
+        saveOrderToFirestore(order);
     }
 
-    private void saveOrderToFirestore(long restaurantId, Order order) {
+    private void saveOrderToFirestore(Order order) {
         OrderDto orderDto = OrderDto.builder()
                 .id(order.getId())
                 .status(order.getOrderStatus())
                 .address(order.getAddress())
                 .build();
 
-        firestoreUtil.insertData(getOrderCollectionName(restaurantId),
+        firestoreUtil.insertData(getOrderCollectionName(order.getRestaurant().getId()),
                 getOrderDocumentName(order.getId()), orderDto);
     }
 
