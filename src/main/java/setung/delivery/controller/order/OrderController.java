@@ -11,13 +11,7 @@ import setung.delivery.controller.order.dto.OrderDto;
 import setung.delivery.controller.order.specification.OrderSpecification;
 import setung.delivery.domain.order.model.Order;
 import setung.delivery.domain.order.model.OrderStatus;
-import setung.delivery.domain.order.RequestOrder;
 import setung.delivery.domain.order.service.OrderService;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 @RestController
 @RequestMapping
@@ -26,9 +20,9 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("/orders")
-    public void order(@LoginUserId long userId, @RequestBody RequestOrder requestOrder) {
-        orderService.order(userId, requestOrder);
+    @PostMapping("/orders/restaurants/{restaurantId}")
+    public void order(@LoginUserId long userId, @PathVariable long restaurantId) {
+        orderService.order(userId, restaurantId);
     }
 
     @GetMapping("/users/{orderId}")

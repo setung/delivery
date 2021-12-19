@@ -7,22 +7,21 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.domain.basket.model.BasketMenu;
+import setung.delivery.domain.basket.service.BasketService;
 import setung.delivery.domain.menu.model.Menu;
-import setung.delivery.domain.order.*;
+import setung.delivery.domain.menu.service.MenuService;
 import setung.delivery.domain.order.aop.SaveOrderToFirestoreForRestaurant;
 import setung.delivery.domain.order.aop.SaveOrderToFirestoreForUser;
 import setung.delivery.domain.order.model.Order;
 import setung.delivery.domain.order.model.OrderMenu;
 import setung.delivery.domain.order.model.OrderStatus;
+import setung.delivery.domain.order.repository.OrderRepository;
 import setung.delivery.domain.restaurant.model.Restaurant;
+import setung.delivery.domain.restaurant.service.RestaurantService;
 import setung.delivery.domain.user.model.User;
+import setung.delivery.domain.user.service.UserService;
 import setung.delivery.exception.CustomException;
 import setung.delivery.exception.ErrorCode;
-import setung.delivery.domain.order.repository.OrderRepository;
-import setung.delivery.domain.menu.service.MenuService;
-import setung.delivery.domain.basket.service.BasketService;
-import setung.delivery.domain.restaurant.service.RestaurantService;
-import setung.delivery.domain.user.service.UserService;
 
 import java.util.List;
 
@@ -39,8 +38,7 @@ public class OrderService {
     private final UserService userService;
 
     @SaveOrderToFirestoreForRestaurant
-    public Order order(long userId, RequestOrder requestOrder) {
-        long restaurantId = requestOrder.getRestaurantId();
+    public Order order(long userId, long restaurantId) {
         List<BasketMenu> basketMenus = basketService.findBasketMenus(userId, restaurantId);
         Restaurant restaurant = restaurantService.findRestaurantById(restaurantId);
         User user = userService.findUserById(userId);
@@ -48,7 +46,7 @@ public class OrderService {
 
         Order order = Order.builder()
                 .orderStatus(OrderStatus.ORDER_REQUEST)
-                .address(requestOrder.getAddress())
+                .address(user.getAddress())
                 .restaurant(restaurant)
                 .user(user)
                 .build();
