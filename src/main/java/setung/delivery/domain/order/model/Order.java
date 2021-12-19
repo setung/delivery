@@ -51,6 +51,10 @@ public class Order extends BaseEntity {
         this.orderStatus = orderStatus;
     }
 
+    public void updateRider(Rider rider) {
+        this.rider = rider;
+    }
+
     public Order(OrderDto orderDto) {
         id = orderDto.getId();
         user = new User(orderDto.getUser());

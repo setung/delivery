@@ -36,6 +36,7 @@ public class Rider extends BaseEntity {
     private String password;
     private Double lon;
     private Double lat;
+    private Double deliveryRange;
 
     @JsonIgnore
     @OneToMany(mappedBy = "rider", fetch = FetchType.LAZY)
