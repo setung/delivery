@@ -17,6 +17,8 @@ public enum ErrorCode {
     NOT_FOUND_RIDER(HttpStatus.NOT_FOUND, "해당 RIDER를 찾을 수 없습니다."),
 
     BAD_REQUEST_MENU(HttpStatus.BAD_REQUEST, "MENU에 대해 잘못된 요청을 하였습니다."),
+    
+    BAD_REQUEST_DELIVERY(HttpStatus.BAD_REQUEST, "DELIVERY에 대해 잘못된 요청을 하였습니다."),
 
     NEED_TO_LOGIN_USER(HttpStatus.UNAUTHORIZED, "USER 로그인이 필요합니다."),
     NEED_TO_LOGIN_OWNER(HttpStatus.UNAUTHORIZED, "OWNER 로그인이 필요합니다."),

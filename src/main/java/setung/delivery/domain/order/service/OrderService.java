@@ -18,10 +18,13 @@ import setung.delivery.domain.order.model.OrderStatus;
 import setung.delivery.domain.order.repository.OrderRepository;
 import setung.delivery.domain.restaurant.model.Restaurant;
 import setung.delivery.domain.restaurant.service.RestaurantService;
+import setung.delivery.domain.rider.model.Rider;
+import setung.delivery.domain.rider.service.RiderService;
 import setung.delivery.domain.user.model.User;
 import setung.delivery.domain.user.service.UserService;
 import setung.delivery.exception.CustomException;
 import setung.delivery.exception.ErrorCode;
+import setung.delivery.utils.DistanceCalculator;
 
 import java.util.List;
 
@@ -36,6 +39,7 @@ public class OrderService {
     private final MenuService menuService;
     private final RestaurantService restaurantService;
     private final UserService userService;
+    private final RiderService riderService;
 
     @SaveOrderToFirestoreForRestaurant
     public Order order(long userId, long restaurantId) {
@@ -159,4 +163,43 @@ public class OrderService {
         return order;
     }
 
+    @SaveOrderToFirestoreForRestaurant
+    @SaveOrderToFirestoreForUser
+    public Order approveDelivery(long riderId, long orderId) {
+        Order order = findOrderById(orderId);
+        Rider rider = riderService.findRiderById(riderId);
+        User user = order.getUser();
+        Restaurant restaurant = order.getRestaurant();
+
+        if (order.getOrderStatus() != OrderStatus.ORDER_APPROVAL)
+            throw new CustomException(ErrorCode.BAD_REQUEST_DELIVERY);
+
+        double distToUser = DistanceCalculator.distance(user.getLat(), user.getLon(), rider.getLat(), rider.getLon());
+        double distToRes = DistanceCalculator.distance(restaurant.getLat(), restaurant.getLon(), rider.getLat(), rider.getLon());
+        if (distToUser > rider.getDeliveryRange() || distToRes > rider.getDeliveryRange())
+            throw new CustomException(ErrorCode.BAD_REQUEST_DELIVERY);
+
+        order.updateRider(rider);
+        order.updateOrderStatus(OrderStatus.IN_DELIVERY);
+
+        return order;
+    }
+
+    @SaveOrderToFirestoreForRestaurant
+    @SaveOrderToFirestoreForUser
+    public Order successDelivery(long riderId, long orderId) {
+        Order order = findOrderById(orderId);
+
+        if (order.getOrderStatus() != OrderStatus.IN_DELIVERY)
+            throw new CustomException(ErrorCode.BAD_REQUEST_DELIVERY);
+        if (order.getRider().getId() != riderId)
+            throw new CustomException(ErrorCode.BAD_REQUEST_ORDER);
+
+        order.updateOrderStatus(OrderStatus.DELIVERY_COMPLETE);
+        return order;
+    }
+
+    public Order findOrderById(long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ORDER));
+    }
 }
