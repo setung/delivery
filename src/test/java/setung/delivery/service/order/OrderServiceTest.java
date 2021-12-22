@@ -12,7 +12,6 @@ import setung.delivery.domain.menu.model.Menu;
 import setung.delivery.controller.menu.dto.MenuDto;
 import setung.delivery.domain.order.model.Order;
 import setung.delivery.domain.order.model.OrderStatus;
-import setung.delivery.domain.order.RequestOrder;
 import setung.delivery.domain.order.service.OrderService;
 import setung.delivery.domain.owner.model.Owner;
 import setung.delivery.domain.restaurant.model.Restaurant;
@@ -80,9 +79,7 @@ class OrderServiceTest {
         basketService.addMenuInBasket(user.getId(), restaurant.getId(), basketMenu1);
         basketService.addMenuInBasket(user.getId(), restaurant.getId(), basketMenu2);
 
-        RequestOrder requestOrder = RequestOrder.builder().address("어딘가").restaurantId(restaurant.getId()).build();
-
-        orderService.order(user.getId(), requestOrder);
+        orderService.order(user.getId(), restaurant.getId());
 
         Menu findMenu1 = menuService.findByIdAndRestaurantId(this.menu1.getId(), restaurant.getId());
         Menu findMenu2 = menuService.findByIdAndRestaurantId(this.menu2.getId(), restaurant.getId());
@@ -98,12 +95,10 @@ class OrderServiceTest {
         BasketMenu basketMenu1 = BasketMenu.builder().quantity(2).menuId(menu1.getId()).build();
         basketService.addMenuInBasket(user.getId(), restaurant.getId(), basketMenu1);
 
-        RequestOrder requestOrder = RequestOrder.builder().address("어딘가").restaurantId(restaurant.getId()).build();
-
         menu1 = menuService.findByIdAndRestaurantId(menu1.getId(), restaurant.getId());
         updateQuantity();
 
-        assertThrows(CustomException.class, () -> orderService.order(user.getId(), requestOrder));
+        assertThrows(CustomException.class, () -> orderService.order(user.getId(), restaurant.getId()));
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -116,9 +111,8 @@ class OrderServiceTest {
     public void approveOrder() {
         BasketMenu basketMenu1 = BasketMenu.builder().quantity(2).menuId(menu1.getId()).build();
         basketService.addMenuInBasket(user.getId(), restaurant.getId(), basketMenu1);
-        RequestOrder requestOrder = RequestOrder.builder().address("어딘가").restaurantId(restaurant.getId()).build();
 
-        orderService.order(user.getId(), requestOrder);
+        orderService.order(user.getId(), restaurant.getId());
 
         List<Order> content = orderService.findOrders(user.getId(), null).getContent();
         Order order = content.get(0);
@@ -133,9 +127,8 @@ class OrderServiceTest {
     public void approveOrderWrongOrderStatus() {
         BasketMenu basketMenu1 = BasketMenu.builder().quantity(2).menuId(menu1.getId()).build();
         basketService.addMenuInBasket(user.getId(), restaurant.getId(), basketMenu1);
-        RequestOrder requestOrder = RequestOrder.builder().address("어딘가").restaurantId(restaurant.getId()).build();
 
-        orderService.order(user.getId(), requestOrder);
+        orderService.order(user.getId(), restaurant.getId());
 
         List<Order> content = orderService.findOrders(user.getId(), null).getContent();
         Order order = content.get(0);
@@ -151,9 +144,8 @@ class OrderServiceTest {
     public void refuseOrder() {
         BasketMenu basketMenu1 = BasketMenu.builder().quantity(2).menuId(menu1.getId()).build();
         basketService.addMenuInBasket(user.getId(), restaurant.getId(), basketMenu1);
-        RequestOrder requestOrder = RequestOrder.builder().address("어딘가").restaurantId(restaurant.getId()).build();
 
-        orderService.order(user.getId(), requestOrder);
+        orderService.order(user.getId(), restaurant.getId());
 
         List<Order> content = orderService.findOrders(user.getId(), null).getContent();
         Order order = content.get(0);
@@ -168,9 +160,8 @@ class OrderServiceTest {
     public void refuseOrderWrongOrderStatus() {
         BasketMenu basketMenu1 = BasketMenu.builder().quantity(2).menuId(menu1.getId()).build();
         basketService.addMenuInBasket(user.getId(), restaurant.getId(), basketMenu1);
-        RequestOrder requestOrder = RequestOrder.builder().address("어딘가").restaurantId(restaurant.getId()).build();
 
-        orderService.order(user.getId(), requestOrder);
+        orderService.order(user.getId(), restaurant.getId());
 
         List<Order> content = orderService.findOrders(user.getId(), null).getContent();
         Order order = content.get(0);
@@ -186,15 +177,14 @@ class OrderServiceTest {
     public void cancelOrder() {
         BasketMenu basketMenu1 = BasketMenu.builder().quantity(2).menuId(menu1.getId()).build();
         basketService.addMenuInBasket(user.getId(), restaurant.getId(), basketMenu1);
-        RequestOrder requestOrder = RequestOrder.builder().address("어딘가").restaurantId(restaurant.getId()).build();
 
-        orderService.order(user.getId(), requestOrder);
+        orderService.order(user.getId(), restaurant.getId());
 
         List<Order> content = orderService.findOrders(user.getId(), null).getContent();
         Order order = content.get(0);
 
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_REQUEST);
-        orderService.cancelOrder(user.getId() , order.getId());
+        orderService.cancelOrder(user.getId(), order.getId());
         assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.ORDER_CANCEL);
     }
 
@@ -203,9 +193,8 @@ class OrderServiceTest {
     public void cancelOrderWrongOrderStatus() {
         BasketMenu basketMenu1 = BasketMenu.builder().quantity(2).menuId(menu1.getId()).build();
         basketService.addMenuInBasket(user.getId(), restaurant.getId(), basketMenu1);
-        RequestOrder requestOrder = RequestOrder.builder().address("어딘가").restaurantId(restaurant.getId()).build();
 
-        orderService.order(user.getId(), requestOrder);
+        orderService.order(user.getId(), restaurant.getId());
 
         List<Order> content = orderService.findOrders(user.getId(), null).getContent();
         Order order = content.get(0);

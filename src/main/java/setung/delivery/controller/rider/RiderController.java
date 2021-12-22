@@ -2,7 +2,9 @@ package setung.delivery.controller.rider;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import setung.delivery.domain.rider.model.Rider;
+import setung.delivery.argumentresolver.LoginRiderId;
+import setung.delivery.domain.order.model.Order;
+import setung.delivery.domain.order.service.OrderService;
 import setung.delivery.controller.rider.dto.RiderDto;
 import setung.delivery.domain.rider.service.RiderLoginService;
 import setung.delivery.domain.rider.service.RiderService;
@@ -15,6 +17,7 @@ public class RiderController {
 
     private final RiderService riderService;
     private final RiderLoginService riderLoginService;
+    private final OrderService orderService;
 
     @PostMapping
     public RiderDto join(@RequestBody RiderDto riderDto) {
@@ -35,5 +38,15 @@ public class RiderController {
     @GetMapping("/login")
     public RiderDto getLoginRider() {
         return new RiderDto(riderLoginService.getLoginRider());
+    }
+
+    @PostMapping("/orders/{orderId}/approve")
+    public Order approveDelivery(@LoginRiderId long riderId, @PathVariable long orderId) {
+        return orderService.approveDelivery(riderId, orderId);
+    }
+
+    @PostMapping("/orders/{orderId}/success")
+    public Order successDelivery(@LoginRiderId long riderId, @PathVariable long orderId) {
+        return orderService.successDelivery(riderId, orderId);
     }
 }

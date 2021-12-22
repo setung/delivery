@@ -7,21 +7,24 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.domain.basket.model.BasketMenu;
+import setung.delivery.domain.basket.service.BasketService;
 import setung.delivery.domain.menu.model.Menu;
-import setung.delivery.domain.order.*;
+import setung.delivery.domain.menu.service.MenuService;
+import setung.delivery.domain.order.aop.SaveOrderToFirestoreForRestaurant;
+import setung.delivery.domain.order.aop.SaveOrderToFirestoreForUser;
 import setung.delivery.domain.order.model.Order;
 import setung.delivery.domain.order.model.OrderMenu;
 import setung.delivery.domain.order.model.OrderStatus;
+import setung.delivery.domain.order.repository.OrderRepository;
 import setung.delivery.domain.restaurant.model.Restaurant;
+import setung.delivery.domain.restaurant.service.RestaurantService;
+import setung.delivery.domain.rider.model.Rider;
+import setung.delivery.domain.rider.service.RiderService;
 import setung.delivery.domain.user.model.User;
+import setung.delivery.domain.user.service.UserService;
 import setung.delivery.exception.CustomException;
 import setung.delivery.exception.ErrorCode;
-import setung.delivery.domain.order.repository.OrderMenuRepository;
-import setung.delivery.domain.order.repository.OrderRepository;
-import setung.delivery.domain.menu.service.MenuService;
-import setung.delivery.domain.basket.service.BasketService;
-import setung.delivery.domain.restaurant.service.RestaurantService;
-import setung.delivery.domain.user.service.UserService;
+import setung.delivery.utils.DistanceCalculator;
 
 import java.util.List;
 
@@ -36,9 +39,10 @@ public class OrderService {
     private final MenuService menuService;
     private final RestaurantService restaurantService;
     private final UserService userService;
+    private final RiderService riderService;
 
-    public void order(long userId, RequestOrder requestOrder) {
-        long restaurantId = requestOrder.getRestaurantId();
+    @SaveOrderToFirestoreForRestaurant
+    public Order order(long userId, long restaurantId) {
         List<BasketMenu> basketMenus = basketService.findBasketMenus(userId, restaurantId);
         Restaurant restaurant = restaurantService.findRestaurantById(restaurantId);
         User user = userService.findUserById(userId);
@@ -46,11 +50,12 @@ public class OrderService {
 
         Order order = Order.builder()
                 .orderStatus(OrderStatus.ORDER_REQUEST)
-                .address(requestOrder.getAddress())
+                .address(user.getAddress())
                 .restaurant(restaurant)
                 .user(user)
                 .build();
-        orderRepository.save(order);
+
+        order = orderRepository.save(order);
 
         // 장바구니에 있는 BasketMenu 순회
         for (BasketMenu basketMenu : basketMenus) {
@@ -74,6 +79,8 @@ public class OrderService {
 
         basketService.clearBasket(userId, restaurantId); // 주문 완료후 장바구니 삭제
         order.updateTotalPrice(totalPrice);
+
+        return order;
     }
 
     public Order findOrderById(long userId, long orderId) {
@@ -93,7 +100,9 @@ public class OrderService {
         return orderRepository.findAll(spec, pageable);
     }
 
-    public void approveOrder(long ownerId, long restaurantId, long orderId) {
+    @SaveOrderToFirestoreForRestaurant
+    @SaveOrderToFirestoreForUser
+    public Order approveOrder(long ownerId, long restaurantId, long orderId) {
         restaurantService.findRestaurantByIdAndOwnerId(ownerId, restaurantId);
         Order order = findByIdAndRestaurantId(orderId, restaurantId);
 
@@ -101,9 +110,13 @@ public class OrderService {
             throw new CustomException(ErrorCode.BAD_REQUEST_ORDER);
 
         order.updateOrderStatus(OrderStatus.ORDER_APPROVAL);
+
+        return order;
     }
 
-    public void refuseOrder(long ownerId, long restaurantId, long orderId) {
+    @SaveOrderToFirestoreForRestaurant
+    @SaveOrderToFirestoreForUser
+    public Order refuseOrder(long ownerId, long restaurantId, long orderId) {
         restaurantService.findRestaurantByIdAndOwnerId(ownerId, restaurantId);
         Order order = findByIdAndRestaurantId(orderId, restaurantId);
         List<OrderMenu> orderMenus = orderMenuService.findByOrderId(orderId);
@@ -117,6 +130,8 @@ public class OrderService {
             Menu menu = menuService.findByIdAndRestaurantId(orderMenu.getMenu().getId(), restaurantId);
             menu.updateQuantity(menu.getQuantity() + orderMenu.getQuantity());
         }
+
+        return order;
     }
 
     public Order findByIdAndRestaurantId(long orderId, long restaurantId) {
@@ -128,7 +143,8 @@ public class OrderService {
         return order;
     }
 
-    public void cancelOrder(long userId, long orderId) {
+    @SaveOrderToFirestoreForRestaurant
+    public Order cancelOrder(long userId, long orderId) {
         Order order = orderRepository.findByOrderIdAndUserId(orderId, userId);
         List<OrderMenu> orderMenus = orderMenuService.findByOrderId(orderId);
 
@@ -143,5 +159,47 @@ public class OrderService {
             Menu menu = menuService.findByIdAndRestaurantId(orderMenu.getMenu().getId(), order.getRestaurant().getId());
             menu.updateQuantity(menu.getQuantity() + orderMenu.getQuantity());
         }
+
+        return order;
+    }
+
+    @SaveOrderToFirestoreForRestaurant
+    @SaveOrderToFirestoreForUser
+    public Order approveDelivery(long riderId, long orderId) {
+        Order order = findOrderById(orderId);
+        Rider rider = riderService.findRiderById(riderId);
+        User user = order.getUser();
+        Restaurant restaurant = order.getRestaurant();
+
+        if (order.getOrderStatus() != OrderStatus.ORDER_APPROVAL)
+            throw new CustomException(ErrorCode.BAD_REQUEST_DELIVERY);
+
+        double distToUser = DistanceCalculator.distance(user.getLat(), user.getLon(), rider.getLat(), rider.getLon());
+        double distToRes = DistanceCalculator.distance(restaurant.getLat(), restaurant.getLon(), rider.getLat(), rider.getLon());
+        if (distToUser > rider.getDeliveryRange() || distToRes > rider.getDeliveryRange())
+            throw new CustomException(ErrorCode.BAD_REQUEST_DELIVERY);
+
+        order.updateRider(rider);
+        order.updateOrderStatus(OrderStatus.IN_DELIVERY);
+
+        return order;
+    }
+
+    @SaveOrderToFirestoreForRestaurant
+    @SaveOrderToFirestoreForUser
+    public Order successDelivery(long riderId, long orderId) {
+        Order order = findOrderById(orderId);
+
+        if (order.getOrderStatus() != OrderStatus.IN_DELIVERY)
+            throw new CustomException(ErrorCode.BAD_REQUEST_DELIVERY);
+        if (order.getRider().getId() != riderId)
+            throw new CustomException(ErrorCode.BAD_REQUEST_ORDER);
+
+        order.updateOrderStatus(OrderStatus.DELIVERY_COMPLETE);
+        return order;
+    }
+
+    public Order findOrderById(long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_ORDER));
     }
 }

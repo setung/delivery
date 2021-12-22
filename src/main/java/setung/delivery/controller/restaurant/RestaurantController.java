@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import setung.delivery.argumentresolver.LoginOwnerId;
+import setung.delivery.argumentresolver.LoginUserId;
 import setung.delivery.controller.restaurant.specification.RestaurantSpecification;
 import setung.delivery.domain.restaurant.model.Restaurant;
 import setung.delivery.domain.restaurant.model.RestaurantCategory;
@@ -27,13 +28,14 @@ public class RestaurantController {
 
     @GetMapping()
     public Page<RestaurantDto> findRestaurants(
+            @LoginUserId long userId,
             @RequestParam(required = false) RestaurantCategory category,
             Pageable pageable) {
 
         Specification<Restaurant> spec = (root, query, criteriaBuilder) -> null;
         if (category != null) spec = spec.and(RestaurantSpecification.equalCategory(category));
 
-        return restaurantService.findRestaurants(spec, pageable).map(RestaurantDto::new);
+        return restaurantService.findRestaurants(userId, spec, pageable).map(RestaurantDto::new);
     }
 
     @DeleteMapping("/{restaurantId}")
