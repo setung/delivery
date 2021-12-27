@@ -3,7 +3,7 @@
 배달의 민족을 모티브한 어플리케이션 개발
 
 ### 프로젝트 구조
-![delivery_structure](https://user-images.githubusercontent.com/67427856/147480543-5ef00ec3-0622-4536-95d7-bb1ae23ca147.png)
+![delivery_structure](https://user-images.githubusercontent.com/67427856/147481436-4b013ff5-cfcf-4fa6-8560-0b1df8338e8c.png)
 
 
 ### 프로젝트 목표
