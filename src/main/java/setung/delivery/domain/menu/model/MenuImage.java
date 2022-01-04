@@ -16,9 +16,12 @@ import javax.persistence.*;
 public class MenuImage extends BaseEntity {
 
     @Id
+    @GeneratedValue
     @Column(name = "menu_image_id")
-    private String id;
+    private Long id;
 
+    @Column(unique = true, length = 50)
+    private String fileId;
     private String fileName;
 
     @ManyToOne
