@@ -67,7 +67,7 @@ public class MenuService {
             throw new CustomException(ErrorCode.NOT_FOUND_RESTAURANT);
 
         for (MenuImage menuImage : findMenuImagesByMenu(restaurantId, menuId)) {
-            deleteMenuImage(menuImage.getId());
+            deleteMenuImage(menuImage.getFileId());
         }
 
         menuRepository.deleteById(menuId);
@@ -102,7 +102,7 @@ public class MenuService {
 
         for (FirebaseStorageUtil.SavedFile savedFile : savedFiles) {
             MenuImage menuImage = MenuImage.builder()
-                    .id(savedFile.getId())
+                    .fileId(savedFile.getId())
                     .fileName(savedFile.getFileName())
                     .menu(menu)
                     .build();
@@ -128,8 +128,8 @@ public class MenuService {
         deleteMenuImage(menuImageId);
     }
 
-    private void deleteMenuImage(String menuImageId) {
-        firebaseStorageUtil.delete(menuImageId);
-        menuImageRepository.deleteById(menuImageId);
+    private void deleteMenuImage(String fileId) {
+        firebaseStorageUtil.delete(fileId);
+        menuImageRepository.deleteByFileId(fileId);
     }
 }

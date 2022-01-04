@@ -42,7 +42,7 @@ public class FirebaseStorageUtil {
         if (getExtension(originalFileName) == null)
             throw new CustomException(ErrorCode.BAD_REQUEST_MENU);
 
-        return UUID.randomUUID().toString() + getExtension(originalFileName);
+        return UUID.randomUUID() + "." + getExtension(originalFileName);
     }
 
     String getExtension(String originalFileName) {

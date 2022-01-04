@@ -10,7 +10,7 @@ import setung.delivery.domain.menu.model.MenuImage;
 @NoArgsConstructor
 public class MenuImageDto {
 
-    private String id;
+    private Long id;
     private String fileName;
 
     public MenuImageDto(MenuImage menuImage) {

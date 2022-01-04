@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface MenuImageRepository extends JpaRepository<MenuImage, String> {
     List<MenuImage> findByMenuId(long menuId);
+
+    void deleteByFileId(String fileId);
 }
