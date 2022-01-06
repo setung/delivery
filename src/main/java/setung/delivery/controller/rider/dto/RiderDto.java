@@ -16,6 +16,7 @@ public class RiderDto {
     private String name;
     private String address;
     private String password;
+    private Double deliveryRange;
 
     public RiderDto(Rider rider) {
         id = rider.getId();
@@ -24,5 +25,6 @@ public class RiderDto {
         name = rider.getName();
         address = rider.getAddress();
         password = rider.getPassword();
+        deliveryRange = rider.getDeliveryRange();
     }
 }
