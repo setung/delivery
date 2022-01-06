@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import setung.delivery.domain.basket.model.BasketMenu;
 import setung.delivery.domain.basket.service.BasketService;
@@ -165,6 +166,7 @@ public class OrderService {
 
     @SaveOrderToFirestoreForRestaurant
     @SaveOrderToFirestoreForUser
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public Order approveDelivery(long riderId, long orderId) {
         Order order = findOrderById(orderId);
         Rider rider = riderService.findRiderById(riderId);
