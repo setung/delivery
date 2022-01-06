@@ -3,6 +3,7 @@ package setung.delivery.controller.rider;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import setung.delivery.argumentresolver.LoginRiderId;
+import setung.delivery.controller.order.dto.OrderDto;
 import setung.delivery.domain.order.model.Order;
 import setung.delivery.domain.order.service.OrderService;
 import setung.delivery.controller.rider.dto.RiderDto;
@@ -41,12 +42,12 @@ public class RiderController {
     }
 
     @PostMapping("/orders/{orderId}/approve")
-    public Order approveDelivery(@LoginRiderId long riderId, @PathVariable long orderId) {
-        return orderService.approveDelivery(riderId, orderId);
+    public OrderDto approveDelivery(@LoginRiderId long riderId, @PathVariable long orderId) {
+        return new OrderDto(orderService.approveDelivery(riderId, orderId));
     }
 
     @PostMapping("/orders/{orderId}/success")
-    public Order successDelivery(@LoginRiderId long riderId, @PathVariable long orderId) {
-        return orderService.successDelivery(riderId, orderId);
+    public OrderDto successDelivery(@LoginRiderId long riderId, @PathVariable long orderId) {
+        return new OrderDto(orderService.successDelivery(riderId, orderId));
     }
 }

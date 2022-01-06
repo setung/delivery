@@ -49,6 +49,7 @@ public class Rider extends BaseEntity {
         name = riderDto.getName();
         address = riderDto.getAddress();
         password = riderDto.getPassword();
+        deliveryRange = riderDto.getDeliveryRange();
     }
 
     public Rider setLatLon(LatLonData latLon) {
